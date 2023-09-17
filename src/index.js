@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/app/app";
+import AppHeader from "./components/AppHeader/AppHeader";
+import BurgerIngredients from "./components/BurgerIngredients/BurgerIngredients";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
