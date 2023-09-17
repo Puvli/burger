@@ -13,8 +13,6 @@ const Modal = ({ title, children, onClose }) => {
       }
     };
 
-    
-
     document.addEventListener("keyup", handleKey);
 
     return () => document.removeEventListener("keyup", handleKey);
@@ -37,7 +35,10 @@ const Modal = ({ title, children, onClose }) => {
   return ReactDOM.createPortal(
     <>
       <ModalOverlay onClick={onClose}>
-        <div className={`${styles.container}`}>
+        <div
+          className={`${styles.container}`}
+          onClick={(evt) => evt.stopPropagation()}
+        >
           {!(title === "") && (
             <h2 className={`${styles.header} text text_type_main-large mt-10`}>
               {title}

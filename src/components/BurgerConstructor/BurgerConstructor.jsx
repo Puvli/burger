@@ -31,20 +31,20 @@ const BurgerComponents = ({ data, bun }) => {
   return (
     <>
       <ConstructorElement
-        text={`${bun.name}`}
+        text={`${bun.name} (верх)`}
         price={`${bun.price}`}
         thumbnail={`${bun.image}`}
         type="top"
         isLocked={true}
         extraClass="mr-4"
       />
-      <div className={`${styles.list} custom-scroll`}>
+      {/* <div className={`${styles.list} custom-scroll`}>
         {data.map((item) => {
           return <BurgerComponent item={item} key={item._id} />;
         })}
-      </div>
+      </div> */}
       <ConstructorElement
-        text={`${bun.name}`}
+        text={`${bun.name} (низ)`}
         price={`${bun.price}`}
         thumbnail={`${bun.image}`}
         type="bottom"

@@ -3,6 +3,7 @@
   /* outline: 1px solid rgb(47, 255, 0); */
   align-items: center;
   align-self: center;
+  gap: 40px;
 }
 
 .info__price {
