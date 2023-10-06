@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.spans {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 520px;
+    text-align: center;
+}
+
+.image {
+    background-image: url('../../images/galochka.svg') ;
+    background-size: cover;
+    width: 120px;
+    height: 120px;
+}
