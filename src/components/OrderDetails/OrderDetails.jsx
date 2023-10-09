@@ -1,10 +1,10 @@
 import Modal from "../Modal/Modal";
 import styles from "./OrderDetails.module.css";
 
-const OrderDetails = () => {
+const OrderDetails = ({number}) => {
   return (
       <div className={`${styles.container} pt-20 pb-30`}>
-        <p className="text text_type_digits-large mb-8">034536</p>
+        <p className="text text_type_digits-large mb-8">{number}</p>
         <span className="text text_type_main-medium mb-15">
           идентификатор заказа
         </span>

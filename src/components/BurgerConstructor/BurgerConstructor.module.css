@@ -40,6 +40,13 @@
   width: 100%;
 }
 
+.drag-components {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: end;
+}
+
 .scroll {
   overflow-y: scroll;
   margin-top: 40px;

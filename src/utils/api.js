@@ -17,6 +17,14 @@ const request = (path, options) => {
   return fetch(url, options).then(checkResponse);
 };
 
-export function Api() {
+export function ingredientsApi() {
   return request("ingredients", { headers, method: "GET" });
 }
+
+export const getOrderNumber = (id) => {
+  return request("orders", {
+    headers,
+    method: "POST",
+    body: JSON.stringify(id),
+  });
+};
