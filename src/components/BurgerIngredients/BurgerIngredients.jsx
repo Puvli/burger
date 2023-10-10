@@ -39,22 +39,31 @@ const IngredientsItems = {
   sauce: "Соусы",
 };
 
-const BurgerIngredient = ({ element, count, addClick, onOpen }) => {
+const BurgerIngredient = ({ element, count, addClick, onOpen, addToOrder }) => {
   const { image, price, name, _id, type } = element;
-
-  const handleClick = () => {
-    addClick(type, _id);
-  };
 
   const handleOnOpen = () => {
     onOpen(element);
   };
 
+  const handleAddToOrder = (e) => {
+    e.stopPropagation();
+    addToOrder(element);
+    addClick(type, _id);
+  };
+
   return (
-    <li className={`${styles.ingredient} pt-6`} onClick={handleOnOpen}>
-      <img src={image} alt={name} className="pl-4 pr-4" />
-      <div className={`${styles.currency}`} onClick={handleClick}>
-        <p className="text text_type_digits-default">{price} </p>
+    <li className={`${styles.ingredient} pt-6`}>
+      <img
+        src={image}
+        alt={name}
+        className="pl-4 pr-4"
+        onClick={handleOnOpen}
+      />
+      <div className={`${styles.currency}`}>
+        <p className="text text_type_digits-default" onClick={handleAddToOrder}>
+          {price}{" "}
+        </p>
         <CurrencyIcon type={"primary"} />
       </div>
       <p className={`${styles.text} text text_type_main-default`}>{name}</p>
@@ -90,6 +99,7 @@ const Ingredients = forwardRef((props, ref) => {
               addClick={props.addClick}
               count={props.ingredientsCount[ingredient._id]}
               onOpen={props.onOpen}
+              addToOrder={props.addToOrder}
             />
           ))}
       </ul>
@@ -105,32 +115,20 @@ Ingredients.propTypes = {
   ingredients: PropTypes.array.isRequired,
 };
 
-function BurgerIngredients({ onOpen, ingredients }) {
+function BurgerIngredients({
+  onOpen,
+  ingredients,
+  addToOrder,
+  addClick,
+  bunCounter,
+  sauceCounter,
+  mainCounter,
+}) {
   const bunRef = useRef(null);
   const mainRef = useRef(null);
   const sauceRef = useRef(null);
 
-  const [bunCounter, setBun] = useState({});
-  const [mainCounter, setMain] = useState({});
-  const [sauceCounter, setSauce] = useState({});
-
   const [currentType, setCurrentType] = useState("bun");
-
-  const addClick = (type, id) => {
-    if (type === "bun") {
-      setBun({ ...bunCounter, [id]: bunCounter[id] ? bunCounter[id] + 1 : 1 });
-    } else if (type === "main") {
-      setMain({
-        ...mainCounter,
-        [id]: mainCounter[id] ? mainCounter[id] + 1 : 1,
-      });
-    } else if (type === "sauce") {
-      setSauce({
-        ...sauceCounter,
-        [id]: sauceCounter[id] ? sauceCounter[id] + 1 : 1,
-      });
-    }
-  };
 
   const clickType = (type) => {
     setCurrentType(type);
@@ -152,6 +150,7 @@ function BurgerIngredients({ onOpen, ingredients }) {
           title={IngredientsItems["bun"]}
           addClick={addClick}
           onOpen={onOpen}
+          addToOrder={addToOrder}
         />
         <Ingredients
           ref={sauceRef}
@@ -160,6 +159,7 @@ function BurgerIngredients({ onOpen, ingredients }) {
           title={IngredientsItems["sauce"]}
           addClick={addClick}
           onOpen={onOpen}
+          addToOrder={addToOrder}
         />
         <Ingredients
           ref={mainRef}
@@ -168,6 +168,7 @@ function BurgerIngredients({ onOpen, ingredients }) {
           title={IngredientsItems["main"]}
           addClick={addClick}
           onOpen={onOpen}
+          addToOrder={addToOrder}
         />
       </div>
     </section>
