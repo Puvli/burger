@@ -147,6 +147,10 @@ function App() {
       });
   };
 
+  const contextValue = React.useMemo(() => {
+    return { clickedIngredient, deleteIngredient };
+  }, [clickedIngredient, deleteIngredient]);
+
   return (
     <>
       <AppHeader />
@@ -159,7 +163,7 @@ function App() {
         sauceCounter={sauceCounter}
         addClick={addClick}
       />
-      <BurgerContext.Provider value={{ clickedIngredient, deleteIngredient }}>
+      <BurgerContext.Provider value={contextValue}>
         <BurgerConstructor onClick={makeOrder} />
       </BurgerContext.Provider>
       (

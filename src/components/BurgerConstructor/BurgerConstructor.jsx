@@ -32,6 +32,7 @@ const BurgerComponent = ({ item, index }) => {
 //проверка типов
 BurgerComponent.propTypes = {
   item: PropTypes.object,
+  index: PropTypes.number,
 };
 
 const BurgerComponents = () => {
@@ -104,17 +105,27 @@ Info.propTypes = {
 const BurgerConstructor = ({ onClick }) => {
   const { clickedIngredient } = React.useContext(BurgerContext);
 
-  const [price, setPrice] = React.useState(0);
-  React.useEffect(() => {
-    setPrice(() => {
-      const bunPrice = clickedIngredient.bun
-        ? clickedIngredient.bun.price * 2
-        : 0;
-      const itemsPrices = clickedIngredient.items
-        ? clickedIngredient.items.reduce((sum, item) => sum + item.price, 0)
-        : 0;
-      return bunPrice + itemsPrices;
-    });
+  // const [price, setPrice] = React.useState(0);
+  // React.useEffect(() => {
+  //   setPrice(() => {
+  //     const bunPrice = clickedIngredient.bun
+  //       ? clickedIngredient.bun.price * 2
+  //       : 0;
+  //     const itemsPrices = clickedIngredient.items
+  //       ? clickedIngredient.items.reduce((sum, item) => sum + item.price, 0)
+  //       : 0;
+  //     return bunPrice + itemsPrices;
+  //   });
+  // }, [clickedIngredient]);
+
+  const price = React.useMemo(() => {
+    const bunPrice = clickedIngredient.bun
+      ? clickedIngredient.bun.price * 2
+      : 0;
+    const itemsPrices = clickedIngredient.items
+      ? clickedIngredient.items.reduce((sum, item) => sum + item.price, 0)
+      : 0;
+    return bunPrice + itemsPrices;
   }, [clickedIngredient]);
 
   return (
