@@ -1,4 +1,4 @@
-import { OPEN_MODAL_ORDER, CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from "../actions/Modal";
+import { OPEN_MODAL_ORDER, CURRENT_INGREDIENT, REMOVE_CURRENT_INGREDIENT } from "../actions/modal";
 
 const initialState = {
   isOpen: false,

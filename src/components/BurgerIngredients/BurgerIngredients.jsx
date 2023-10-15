@@ -5,7 +5,7 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { CURRENT_INGREDIENT } from "../../services/actions/Modal";
+import { CURRENT_INGREDIENT } from "../../services/actions/modal";
 import { useDrag } from "react-dnd";
 
 const IngredientsMenu = ({ click, currentType, refs }) => {
@@ -137,18 +137,20 @@ const Ingredients = forwardRef((props, ref) => {
 
 //проверка типов
 Ingredients.propTypes = {
-  addClick: PropTypes.func.isRequired,
-  ingredientsCount: PropTypes.object.isRequired,
+  title: PropTypes.string,
   onOpen: PropTypes.func.isRequired,
+  addToOrder: PropTypes.func.isRequired,
   ingredients: PropTypes.array.isRequired,
 };
 
-function BurgerIngredients({ onOpen, ingredients, addToOrder }) {
+function BurgerIngredients({ onOpen, addToOrder }) {
   const bunRef = useRef(null);
   const mainRef = useRef(null);
   const sauceRef = useRef(null);
   const ingredientsRef = useRef(null);
   const [currentType, setCurrentType] = useState("bun");
+
+  const ingredients = useSelector((store) => store.loadedIngredients);
 
   const clickType = (type) => {
     setCurrentType(type);
@@ -224,7 +226,6 @@ function BurgerIngredients({ onOpen, ingredients, addToOrder }) {
 //проверка типов
 BurgerIngredients.propTypes = {
   onOpen: PropTypes.func.isRequired,
-  ingredients: PropTypes.object.isRequired,
   addToOrder: PropTypes.func.isRequired,
 };
 

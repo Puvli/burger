@@ -4,18 +4,18 @@ import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
 import React from "react";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { ingredientsApi } from "../../utils/api";
 import Modal from "../Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ADD_INGREDIENTS_SUCCESS,
   getIngredients,
 } from "../../services/actions/actions";
-import { REMOVE_CURRENT_INGREDIENT } from "../../services/actions/Modal";
-import { OPEN_MODAL_ORDER } from "../../services/actions/Modal";
-import { DRAG_INGREDIENT_TO_CONSTRUCTOR } from "../../services/actions/Drag";
+import { REMOVE_CURRENT_INGREDIENT } from "../../services/actions/modal";
+import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
+import { DRAG_INGREDIENT_TO_CONSTRUCTOR } from "../../services/actions/drag";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { v4 as uuid4 } from "uuid";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,14 +39,9 @@ function App() {
     console.log(elem);
   };
 
-  const ingredientsFromStore = useSelector((store) => store.loadedIngredients);
-
   React.useEffect(() => {
-    ingredientsApi();
     dispatch(getIngredients());
   }, []);
-
-  // console.log(ingredientsFromStore);
 
   const [isOpenModalOrder, setOpenModalOrder] = React.useState(false);
 
@@ -68,9 +63,14 @@ function App() {
 
   const modalOrderOpen = useSelector((store) => store.modal.isOpen);
 
+  // const uniqueId = uuid4();
+
   const onDropHandler = (item) => {
     if (item.type !== "bun") {
-      dispatch({ type: DRAG_INGREDIENT_TO_CONSTRUCTOR, items: item });
+      dispatch({
+        type: DRAG_INGREDIENT_TO_CONSTRUCTOR,
+        items: item,
+      });
     } else if (item.type === "bun") {
       dispatch({ type: DRAG_INGREDIENT_TO_CONSTRUCTOR, bun: item });
     }
@@ -81,11 +81,7 @@ function App() {
     <>
       <AppHeader />
       <DndProvider backend={HTML5Backend}>
-        <BurgerIngredients
-          onOpen={ingredientOpener}
-          ingredients={ingredientsFromStore}
-          addToOrder={addToOrder}
-        />
+        <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
         <BurgerConstructor onDropHandler={onDropHandler} />(
         {modalOrderOpen && (
           <Modal title="" onClose={handleModalOrder}>

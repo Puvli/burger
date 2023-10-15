@@ -11,10 +11,12 @@ import {
   DELETE_INGREDIENTS,
   makeNewOrder,
 } from "../../services/actions/actions";
-import { OPEN_MODAL_ORDER } from "../../services/actions/Modal";
-import { DRAG_IN_CONSTRUCTOR } from "../../services/actions/Drag";
+import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
+import { DRAG_IN_CONSTRUCTOR } from "../../services/actions/drag";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef } from "react";
+import { v4 as uuid4 } from "uuid";
+import { addIngredient } from "../../services/actions/addIngredient";
 
 const BurgerComponent = ({ item, index }) => {
   const style = {
@@ -68,6 +70,9 @@ const BurgerComponent = ({ item, index }) => {
 
       item.index = hoverIndex;
     },
+    drop(item) {
+      dispatch(addIngredient(item));
+    },
   });
 
   const [{ isDragging }, drag] = useDrag({
@@ -112,16 +117,14 @@ BurgerComponent.propTypes = {
 };
 
 const BurgerComponents = () => {
+  // const dispatch = useDispatch();
   const clickedIngredient = useSelector(
     (store) => store.ingredients.clickedIngredient
   );
-  // const draggedElements = useSelector(
-  //   (store) => store.dragItems.clickedIngredient
-  // );
 
   return (
     <>
-      {(clickedIngredient.bun && (
+      {clickedIngredient.bun && (
         <ConstructorElement
           text={`${clickedIngredient.bun.name} (верх)`}
           price={`${clickedIngredient.bun.price}`}
@@ -130,11 +133,13 @@ const BurgerComponents = () => {
           isLocked={true}
           extraClass="mr-4"
         />
-      )) }
+      )}
 
       {clickedIngredient.items &&
         clickedIngredient.items.map((item, index) => {
-          return <BurgerComponent item={item} key={index} index={index} />;
+          return (
+            <BurgerComponent item={item} key={item.uniqueId} index={index} />
+          );
         })}
 
       {clickedIngredient.bun && (
@@ -157,7 +162,7 @@ const BurgerComponents = () => {
 //   bun: PropTypes.object,
 // };
 
-const Info = ({ onClick, price }) => {
+const Info = () => {
   const dispatch = useDispatch();
   const orderList = useSelector((store) => store.ingredients.clickedIngredient);
   const orderClick = () => {
@@ -204,18 +209,19 @@ const Info = ({ onClick, price }) => {
 };
 
 //проверка типов
-Info.propTypes = {
-  onClick: PropTypes.func,
-  price: PropTypes.number,
-};
+// Info.propTypes = {
+//   onClick: PropTypes.func,
+//   price: PropTypes.number,
+// };
 
 const BurgerConstructor = ({ onClick, onDropHandler }) => {
   // let orderPrice = useSelector((store) => store);
-
+  const dispatch = useDispatch();
   const [, refComponent] = useDrop({
     accept: "ingredient",
     drop(item) {
       onDropHandler(item);
+      dispatch(addIngredient(item));
     },
   });
 

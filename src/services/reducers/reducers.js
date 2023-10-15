@@ -5,11 +5,13 @@ import {
 import {
   DRAG_INGREDIENT_TO_CONSTRUCTOR,
   DRAG_IN_CONSTRUCTOR,
-} from "../actions/Drag";
+} from "../actions/drag";
 import { combineReducers } from "redux";
-import { modalReducer } from "./ModalReducer";
+import { modalReducer } from "./modalReducer";
 import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
+import { v4 as uuid4 } from "uuid";
+import { addIngredientReducer } from "../reducers/addIngredient";
 
 const initialState = {
   clickedIngredient: {
@@ -96,4 +98,5 @@ export const rootReducer = combineReducers({
   modal: modalReducer,
   number: makeNewOrder,
   loadedIngredients: loadIngredients,
+  // id: addIngredientReducer,
 });
