@@ -18,20 +18,6 @@ const Modal = ({ title, children, onClose }) => {
     return () => document.removeEventListener("keyup", handleKey);
   }, []);
 
-  // React.useEffect(() => {
-  //   const handleClick = (e) => {
-  //     if (!e.target.classList.contains("container")) {
-  //       onClose();
-  //     }
-  //   };
-
-  //   const overlay = document.querySelector("container");
-
-  //   overlay.addEventListener("click", handleClick);
-
-  //   return () => overlay.removeEventListener("click", handleClick);
-  // }, []);
-
   return ReactDOM.createPortal(
     <>
       <ModalOverlay onClick={onClose}>

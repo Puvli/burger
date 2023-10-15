@@ -4,6 +4,9 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { CURRENT_INGREDIENT } from "../../services/actions/Modal";
+import { useDrag } from "react-dnd";
 
 const IngredientsMenu = ({ click, currentType, refs }) => {
   const handlePick = (e) => {
@@ -39,50 +42,77 @@ const IngredientsItems = {
   sauce: "Соусы",
 };
 
-const BurgerIngredient = ({ element, count, addClick, onOpen, addToOrder }) => {
-  const { image, price, name, _id, type } = element;
+const BurgerIngredient = ({ element, onOpen, addToOrder }) => {
+  const { image, price, name, _id } = element;
+  console.log(_id);
+  const dispatch = useDispatch();
+
+  const [{ isDrag }, ingredientRef] = useDrag({
+    type: "ingredient",
+    item: element,
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
 
   const handleOnOpen = () => {
     onOpen(element);
+    dispatch({ type: CURRENT_INGREDIENT, current: element });
   };
 
+  const bunCountStore = useSelector(
+    (store) => store.ingredients.clickedIngredient.bun
+  );
+  const itemsFromStore = useSelector(
+    (store) => store.ingredients.clickedIngredient.items
+  );
+
+  const itemsCount = itemsFromStore.filter((item) => item._id === element._id);
+  const others = itemsCount.length;
   const handleAddToOrder = (e) => {
     e.stopPropagation();
     addToOrder(element);
-    addClick(type, _id);
+    // addClick(type, _id);
   };
 
   return (
-    <li className={`${styles.ingredient} pt-6`}>
-      <img
-        src={image}
-        alt={name}
-        className="pl-4 pr-4"
-        onClick={handleOnOpen}
-      />
-      <div className={`${styles.currency}`}>
-        <p className="text text_type_digits-default" onClick={handleAddToOrder}>
-          {price}{" "}
-        </p>
-        <CurrencyIcon type={"primary"} />
-      </div>
-      <p className={`${styles.text} text text_type_main-default`}>{name}</p>
-      {count && (
-        <Counter
-          count={count}
-          size="default"
-          extraClass={`${styles.counter}`}
+    !isDrag && (
+      <li className={`${styles.ingredient} pt-6`} ref={ingredientRef}>
+        <img
+          src={image}
+          alt={name}
+          className="pl-4 pr-4"
+          onClick={handleOnOpen}
         />
-      )}
-    </li>
+        <div className={`${styles.currency}`}>
+          <p
+            className="text text_type_digits-default"
+            onClick={handleAddToOrder}
+          >
+            {price}{" "}
+          </p>
+          <CurrencyIcon type={"primary"} />
+        </div>
+        <p className={`${styles.text} text text_type_main-default`}>{name}</p>
+        {bunCountStore && bunCountStore._id === _id && (
+          <Counter count={1} size="default" extraClass={`${styles.counter}`} />
+        )}
+        {others > 0 && (
+          <Counter
+            count={others}
+            size="default"
+            extraClass={`${styles.counter}`}
+          />
+        )}
+      </li>
+    )
   );
 };
 
 //проверка типов
 BurgerIngredient.propTypes = {
   element: PropTypes.object.isRequired,
-  count: PropTypes.string,
-  addClick: PropTypes.func.isRequired,
+  addToOrder: PropTypes.func.isRequired,
   onOpen: PropTypes.func.isRequired,
 };
 
@@ -96,8 +126,6 @@ const Ingredients = forwardRef((props, ref) => {
             <BurgerIngredient
               key={ingredient._id}
               element={ingredient}
-              addClick={props.addClick}
-              count={props.ingredientsCount[ingredient._id]}
               onOpen={props.onOpen}
               addToOrder={props.addToOrder}
             />
@@ -115,24 +143,48 @@ Ingredients.propTypes = {
   ingredients: PropTypes.array.isRequired,
 };
 
-function BurgerIngredients({
-  onOpen,
-  ingredients,
-  addToOrder,
-  addClick,
-  bunCounter,
-  sauceCounter,
-  mainCounter,
-}) {
+function BurgerIngredients({ onOpen, ingredients, addToOrder }) {
   const bunRef = useRef(null);
   const mainRef = useRef(null);
   const sauceRef = useRef(null);
-
+  const ingredientsRef = useRef(null);
   const [currentType, setCurrentType] = useState("bun");
 
   const clickType = (type) => {
     setCurrentType(type);
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const containerRect = ingredientsRef.current.getBoundingClientRect();
+      const bunsRect = bunRef.current.getBoundingClientRect();
+      const saucesRect = sauceRef.current.getBoundingClientRect();
+      const fillingsRect = mainRef.current.getBoundingClientRect();
+
+      if (
+        bunsRect.top >= containerRect.top &&
+        bunsRect.top < containerRect.bottom
+      ) {
+        setCurrentType("bun");
+      } else if (
+        saucesRect.top >= containerRect.top &&
+        saucesRect.top < containerRect.bottom
+      ) {
+        setCurrentType("sauce");
+      } else if (
+        fillingsRect.top >= containerRect.top &&
+        fillingsRect.top < containerRect.bottom
+      ) {
+        setCurrentType("main");
+      }
+    };
+
+    ingredientsRef.current.addEventListener("scroll", handleScroll);
+
+    return () => {
+      ingredientsRef.current.removeEventListener("scroll", handleScroll);
+    };
+  }, [currentType]);
 
   return (
     <section className={`${styles.container} pt-10`}>
@@ -142,31 +194,25 @@ function BurgerIngredients({
         click={clickType}
         currentType={currentType}
       />
-      <div className={`${styles.scroll} custom-scroll`}>
+      <div className={`${styles.scroll} custom-scroll`} ref={ingredientsRef}>
         <Ingredients
           ref={bunRef}
-          ingredientsCount={bunCounter}
           ingredients={ingredients.buns}
           title={IngredientsItems["bun"]}
-          addClick={addClick}
           onOpen={onOpen}
           addToOrder={addToOrder}
         />
         <Ingredients
           ref={sauceRef}
-          ingredientsCount={sauceCounter}
           ingredients={ingredients.sauces}
           title={IngredientsItems["sauce"]}
-          addClick={addClick}
           onOpen={onOpen}
           addToOrder={addToOrder}
         />
         <Ingredients
           ref={mainRef}
-          ingredientsCount={mainCounter}
           ingredients={ingredients.main}
           title={IngredientsItems["main"]}
-          addClick={addClick}
           onOpen={onOpen}
           addToOrder={addToOrder}
         />
@@ -179,6 +225,7 @@ function BurgerIngredients({
 BurgerIngredients.propTypes = {
   onOpen: PropTypes.func.isRequired,
   ingredients: PropTypes.object.isRequired,
+  addToOrder: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;
