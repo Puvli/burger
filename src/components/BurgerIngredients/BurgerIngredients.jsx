@@ -44,7 +44,6 @@ const IngredientsItems = {
 
 const BurgerIngredient = ({ element, onOpen, addToOrder }) => {
   const { image, price, name, _id } = element;
-  console.log(_id);
   const dispatch = useDispatch();
 
   const [{ isDrag }, ingredientRef] = useDrag({

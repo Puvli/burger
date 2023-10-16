@@ -15,8 +15,6 @@ import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
 import { DRAG_IN_CONSTRUCTOR } from "../../services/actions/drag";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef } from "react";
-import { v4 as uuid4 } from "uuid";
-import { addIngredient } from "../../services/actions/addIngredient";
 
 const BurgerComponent = ({ item, index }) => {
   const style = {
@@ -70,9 +68,6 @@ const BurgerComponent = ({ item, index }) => {
 
       item.index = hoverIndex;
     },
-    drop(item) {
-      dispatch(addIngredient(item));
-    },
   });
 
   const [{ isDragging }, drag] = useDrag({
@@ -117,7 +112,6 @@ BurgerComponent.propTypes = {
 };
 
 const BurgerComponents = () => {
-  // const dispatch = useDispatch();
   const clickedIngredient = useSelector(
     (store) => store.ingredients.clickedIngredient
   );
@@ -156,12 +150,6 @@ const BurgerComponents = () => {
   );
 };
 
-//проверка типов
-// BurgerComponents.propTypes = {
-//   data: PropTypes.array,
-//   bun: PropTypes.object,
-// };
-
 const Info = () => {
   const dispatch = useDispatch();
   const orderList = useSelector((store) => store.ingredients.clickedIngredient);
@@ -177,17 +165,6 @@ const Info = () => {
   const itemsPrices = orderList.items
     ? orderList.items.reduce((sum, item) => sum + item.price, 0)
     : 0;
-  // const price = React.useMemo(() => {
-  //   const bunPrice = clickedIngredient.bun
-  //     ? clickedIngredient.bun.price * 2
-  //     : 0;
-  //   const itemsPrices = clickedIngredient.items
-  //     ? clickedIngredient.items.reduce((sum, item) => sum + item.price, 0)
-  //     : 0;
-  //   return bunPrice + itemsPrices;
-  // }, [clickedIngredient]);
-
-  //price
 
   return (
     <div className={`${styles.info}`}>
@@ -208,20 +185,11 @@ const Info = () => {
   );
 };
 
-//проверка типов
-// Info.propTypes = {
-//   onClick: PropTypes.func,
-//   price: PropTypes.number,
-// };
-
 const BurgerConstructor = ({ onClick, onDropHandler }) => {
-  // let orderPrice = useSelector((store) => store);
-  const dispatch = useDispatch();
   const [, refComponent] = useDrop({
     accept: "ingredient",
     drop(item) {
       onDropHandler(item);
-      dispatch(addIngredient(item));
     },
   });
 

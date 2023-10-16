@@ -6,26 +6,22 @@ import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import OrderDetails from "../OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ADD_INGREDIENTS_SUCCESS,
-  getIngredients,
-} from "../../services/actions/actions";
+import { getIngredients } from "../../services/actions/actions";
 import { REMOVE_CURRENT_INGREDIENT } from "../../services/actions/modal";
 import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
-import { DRAG_INGREDIENT_TO_CONSTRUCTOR } from "../../services/actions/drag";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { v4 as uuid4 } from "uuid";
+import { addIngredient } from "../../services/actions/addIngredient";
 
 function App() {
   const dispatch = useDispatch();
 
   const clickBun = (bun) => {
-    dispatch({ type: ADD_INGREDIENTS_SUCCESS, bun: bun });
+    dispatch(addIngredient(bun));
   };
 
   const clickNotBun = (item) => {
-    dispatch({ type: ADD_INGREDIENTS_SUCCESS, items: item });
+    dispatch(addIngredient(item));
   };
 
   const addToOrder = (elem) => {
@@ -63,18 +59,8 @@ function App() {
 
   const modalOrderOpen = useSelector((store) => store.modal.isOpen);
 
-  // const uniqueId = uuid4();
-
   const onDropHandler = (item) => {
-    if (item.type !== "bun") {
-      dispatch({
-        type: DRAG_INGREDIENT_TO_CONSTRUCTOR,
-        items: item,
-      });
-    } else if (item.type === "bun") {
-      dispatch({ type: DRAG_INGREDIENT_TO_CONSTRUCTOR, bun: item });
-    }
-    console.log(item);
+    dispatch(addIngredient(item));
   };
 
   return (

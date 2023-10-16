@@ -10,8 +10,6 @@ import { combineReducers } from "redux";
 import { modalReducer } from "./modalReducer";
 import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
-import { v4 as uuid4 } from "uuid";
-import { addIngredientReducer } from "../reducers/addIngredient";
 
 const initialState = {
   clickedIngredient: {
@@ -23,20 +21,20 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_INGREDIENTS_SUCCESS:
-      if (action.bun) {
+      if (action.payload.type === "bun") {
         return {
           ...state,
           clickedIngredient: {
             ...state.clickedIngredient,
-            bun: action.bun,
+            bun: action.payload,
           },
         };
-      } else if (action.items) {
+      } else {
         return {
           ...state,
           clickedIngredient: {
             ...state.clickedIngredient,
-            items: [...state.clickedIngredient.items, action.items],
+            items: [...state.clickedIngredient.items, action.payload],
           },
         };
       }
@@ -98,5 +96,4 @@ export const rootReducer = combineReducers({
   modal: modalReducer,
   number: makeNewOrder,
   loadedIngredients: loadIngredients,
-  // id: addIngredientReducer,
 });
