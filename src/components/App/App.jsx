@@ -12,77 +12,77 @@ import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { addIngredient } from "../../services/actions/addIngredient";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from "../../pages/home";
+import Register from "../../pages/register";
+import Login from "../../pages/login";
+import ForgotPassword from "../../pages/forgot-password";
+import ResetPassword from "../../pages/reset-password";
+import Profile from "../../pages/profile";
+import ErrorPage from "../../pages/error";
 
 function App() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const clickBun = (bun) => {
-    dispatch(addIngredient(bun));
-  };
+  // const clickBun = (bun) => {
+  //   dispatch(addIngredient(bun));
+  // };
 
-  const clickNotBun = (item) => {
-    dispatch(addIngredient(item));
-  };
+  // const clickNotBun = (item) => {
+  //   dispatch(addIngredient(item));
+  // };
 
-  const addToOrder = (elem) => {
-    if (elem.type === "bun") {
-      clickBun(elem);
-    } else if (elem.type === "sauce") {
-      clickNotBun(elem);
-    } else if (elem.type === "main") {
-      clickNotBun(elem);
-    }
-    console.log(elem);
-  };
+  // const addToOrder = (elem) => {
+  //   if (elem.type === "bun") {
+  //     clickBun(elem);
+  //   } else if (elem.type === "sauce") {
+  //     clickNotBun(elem);
+  //   } else if (elem.type === "main") {
+  //     clickNotBun(elem);
+  //   }
+  //   console.log(elem);
+  // };
 
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch(getIngredients());
+  // }, []);
 
-  const [isOpenModalOrder, setOpenModalOrder] = React.useState(false);
+  // const [isOpenModalOrder, setOpenModalOrder] = React.useState(false);
 
-  const handleModalOrder = () => {
-    setOpenModalOrder(isOpenModalOrder ? false : true);
-    dispatch({
-      type: OPEN_MODAL_ORDER,
-    });
-  };
+  // const handleModalOrder = () => {
+  //   setOpenModalOrder(isOpenModalOrder ? false : true);
+  //   dispatch({
+  //     type: OPEN_MODAL_ORDER,
+  //   });
+  // };
 
-  const [ingredientOpen, setOpenIngredient] = React.useState(false);
-  const [ingredientInfo, setIngredientInfo] = React.useState({});
+  // const [ingredientOpen, setOpenIngredient] = React.useState(false);
+  // const [ingredientInfo, setIngredientInfo] = React.useState({});
 
-  const ingredientOpener = (info) => {
-    setIngredientInfo(info);
-    setOpenIngredient(ingredientOpen ? false : true);
-    dispatch({ type: REMOVE_CURRENT_INGREDIENT });
-  };
+  // const ingredientOpener = (info) => {
+  //   setIngredientInfo(info);
+  //   setOpenIngredient(ingredientOpen ? false : true);
+  //   dispatch({ type: REMOVE_CURRENT_INGREDIENT });
+  // };
 
-  const modalOrderOpen = useSelector((store) => store.modal.isOpen);
+  // const modalOrderOpen = useSelector((store) => store.modal.isOpen);
 
-  const onDropHandler = (item) => {
-    dispatch(addIngredient(item));
-  };
+  // const onDropHandler = (item) => {
+  //   dispatch(addIngredient(item));
+  // };
 
   return (
-    <>
-      <AppHeader />
-      <DndProvider backend={HTML5Backend}>
-        <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
-        <BurgerConstructor onDropHandler={onDropHandler} />(
-        {modalOrderOpen && (
-          <Modal title="" onClose={handleModalOrder}>
-            <OrderDetails />
-          </Modal>
-        )}
-        ) (
-        {ingredientOpen && ingredientInfo && (
-          <Modal title="Детали ингредиента" onClose={ingredientOpener}>
-            <IngredientDetails data={ingredientInfo} />
-          </Modal>
-        )}
-        )
-      </DndProvider>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/error" element={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
