@@ -1,6 +1,7 @@
 import {
   ADD_INGREDIENTS_SUCCESS,
   DELETE_INGREDIENTS,
+  SET_IS_AUTH_CHECKED,
 } from "../actions/actions";
 import {
   DRAG_INGREDIENT_TO_CONSTRUCTOR,
@@ -10,16 +11,25 @@ import { combineReducers } from "redux";
 import { modalReducer } from "./modalReducer";
 import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
+import { customerReducer } from "./customerReducer";
+import { loginReducer } from "./login";
+import { setUserReducer } from "./setUserReducer";
 
 const initialState = {
   clickedIngredient: {
     items: [],
     bun: null,
   },
+  isAuthCheked: false,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_IS_AUTH_CHECKED:
+      return {
+        ...state,
+        isAuthCheked: action.payload,
+      };
     case ADD_INGREDIENTS_SUCCESS:
       if (action.payload.type === "bun") {
         return {
@@ -96,4 +106,6 @@ export const rootReducer = combineReducers({
   modal: modalReducer,
   number: makeNewOrder,
   loadedIngredients: loadIngredients,
+  customer: customerReducer,
+  // isAuthChecked: setUserReducer,
 });

@@ -13,12 +13,18 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./login.module.css";
+import { resetApi } from "../utils/api";
 
 function ResetPassword() {
   // const emailValue = () => {
   const [value, setValue] = React.useState("bob@example.com");
   const onChange = (e) => {
     setValue(e.target.value);
+  };
+
+  const [passwordValue, setPasswordValue] = React.useState("12345");
+  const onPasswordChange = (e) => {
+    setPasswordValue(e.target.value);
   };
   // }
 
@@ -28,24 +34,29 @@ function ResetPassword() {
     navigate("/login");
   };
 
+  const onClickReset = () => {
+    resetApi({ password: passwordValue, token: value });
+  };
+
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <div className={styles.container}>
         <h2 className={`text text_type_main-large pb-6 ${styles.title}`}>
-        Восстановление пароля
+          Восстановление пароля
         </h2>
         <div className={styles.subcontainer}>
           <PasswordInput
-            onChange={onChange}
+            onChange={onPasswordChange}
             name={"password"}
             placeholder="Введите новый пароль"
+            value={passwordValue}
           />
           <Input
             type={"text"}
             placeholder={"Введите код из письма"}
-            onChange={(e) => setValue(e.target.value)}
-            // value={value}
+            onChange={onChange}
+            value={``}
             name={"name"}
             // error={false}
             // ref={inputRef}
@@ -59,6 +70,7 @@ function ResetPassword() {
           type="primary"
           size="large"
           extraClass="mb-20 mt-6"
+          onClick={onClickReset}
         >
           Сохранить
         </Button>

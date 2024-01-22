@@ -25,7 +25,7 @@ function ErrorPage() {
       <AppHeader onClcik={onButtonClick} />
       <div className={styles.container}>
         <p className="text text_type_main-large">
-          У Вас нет доступа к этой странице!
+          У Вас нет доступа к этой странице;{"("}
         </p>
         <p
           className={`text text_type_main-large text_color_inactive ml-2 ${styles.back}`}

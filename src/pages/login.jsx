@@ -13,14 +13,22 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./login.module.css";
+import { loginApi } from "../utils/api";
+import { useDispatch } from "react-redux";
+import { logIn } from "../services/actions/actions";
 
 function Login() {
-  // const emailValue = () => {
+  const dispatch = useDispatch();
+
   const [value, setValue] = React.useState("bob@example.com");
   const onChange = (e) => {
     setValue(e.target.value);
   };
-  // }
+
+  const [passwordValue, setPasswordValue] = React.useState("");
+  const onPasswordChange = (e) => {
+    setPasswordValue(e.target.value);
+  };
 
   const navigate = useNavigate();
 
@@ -32,19 +40,32 @@ function Login() {
     navigate("/forgot-password");
   };
 
+  const onEnterButton = () => {
+    dispatch(logIn({ email: value, password: passwordValue })).then(() => {
+      // navigate("/");
+      console.log("voshli");
+    });
+  };
+
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <div className={styles.container}>
         <h2 className={`text text_type_main-large pb-6 ${styles.title}`}>
           Вход
         </h2>
         <div className={styles.subcontainer}>
-          <EmailInput onChange={onChange} name={"email"} isIcon={false} />
-          <PasswordInput
+          <EmailInput
             onChange={onChange}
+            name={"email"}
+            isIcon={false}
+            value={value}
+          />
+          <PasswordInput
+            onChange={onPasswordChange}
             name={"password"}
             extraClass="mb-6"
+            value={passwordValue}
           />
         </div>
         <Button
@@ -52,6 +73,7 @@ function Login() {
           type="primary"
           size="large"
           extraClass="mb-20"
+          onClick={onEnterButton}
         >
           Войти
         </Button>

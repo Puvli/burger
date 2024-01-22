@@ -13,6 +13,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./forgot-password.module.css";
+import { useDispatch } from "react-redux";
+import { recoverApi } from "../utils/api";
 
 function ForgotPassword() {
   // const emailValue = () => {
@@ -24,24 +26,43 @@ function ForgotPassword() {
 
   const navigate = useNavigate();
 
+  // const dispatch = useDispatch();
+
+  const recover = () => {
+    // dispatch()
+    const obj = {
+      email: value,
+    };
+    recoverApi(obj).then((data) => {
+      if (data.success) {
+        navigate("/reset-password");
+      }
+    });
+  };
+
   const onButtonClick = () => {
     navigate("/login");
   };
 
   return (
-    <>
-      <AppHeader />
       <div className={styles.container}>
         <h2 className={`text text_type_main-large pb-6 ${styles.title}`}>
           Восстановление пароля
         </h2>
         <div className={styles.subcontainer}>
-          <EmailInput onChange={onChange} name={"email"} isIcon={false} placeholder="Укажите e-mail" />
+          <EmailInput
+            onChange={onChange}
+            name={"email"}
+            isIcon={false}
+            placeholder="Укажите e-mail"
+            value={value}
+          />
           <Button
             htmlType="button"
             type="primary"
             size="large"
             extraClass="mb-20"
+            onClick={recover}
           >
             Восстановить
           </Button>
@@ -61,7 +82,6 @@ function ForgotPassword() {
           </Button>
         </div>
       </div>
-    </>
   );
 }
 

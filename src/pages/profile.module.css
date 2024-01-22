@@ -12,11 +12,22 @@
   /* margin-right: 60px; */
 }
 
+.saveContainer {
+  display: flex;
+  /* gap: 20px; */
+  align-self: flex-end;
+}
+
+.container_none {
+  display: none;
+}
+
 .tabParagraph {
   width: 320px;
   height: 64px;
   text-decoration: none;
   color: #8585AD;
+  cursor: pointer;
 }
 
 .tabParagraph_active {

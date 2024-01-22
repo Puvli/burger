@@ -6,7 +6,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import AppHeader from "../components/AppHeader/AppHeader";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,28 +15,58 @@ import {
   NavLink,
 } from "react-router-dom";
 import styles from "./profile.module.css";
+import {
+  fetchGetUser,
+  getProfileData,
+  logOut,
+  refreshToken,
+  updToken,
+  updateUserInformation,
+} from "../utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  LOGOUT_SUCCESS,
+  SET_IS_AUTH_CHECKED,
+  UPDATE_SUCCESS,
+} from "../services/actions/actions";
 
 function Profile() {
-  // const emailValue = () => {
-  const [value, setValue] = React.useState("bob@example.com");
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
-  // }
+  const [value, setValue] = React.useState("");
+
+  const [passwordValue, setPasswordValue] = React.useState("bob@example.com");
+
+  const [emailValue, setEmailValue] = React.useState("");
+
+  const customer = useSelector((store) => store.customer);
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const onButtonClick = () => {
-    navigate("/login");
+  useEffect(() => {
+    setEmailValue(customer.email);
+    setValue(customer.name);
+  }, [customer]);
+
+  const onEmailChange = (e) => {
+    setEmailValue(e.target.value);
+  };
+
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const onPasswordChange = (e) => {
+    setPasswordValue(e.target.value);
   };
 
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <div className={styles.container}>
         <div className={styles.tabContainer}>
           <NavLink
-            to={{pathname: '/profile'}}
+            to={{ pathname: "/profile" }}
             className={`text text_type_main-medium  ${styles.tabParagraph} ${styles.tabParagraph_active}`}
           >
             Профиль
@@ -51,6 +81,20 @@ function Profile() {
           </p>
           <p
             className={`text text_type_main-medium text_color_inactive ${styles.tabParagraph}`}
+            onClick={() => {
+              logOut({ token: localStorage.getItem("refreshToken") }).then(
+                (res) => {
+                  if (res.success) {
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("accessToken");
+                    dispatch({ type: LOGOUT_SUCCESS });
+                    // localStorage.removeItem("userId");
+                    navigate("/login");
+                    // console.log(res);
+                  }
+                }
+              );
+            }}
           >
             Выход
           </p>
@@ -64,8 +108,8 @@ function Profile() {
           <Input
             type={"text"}
             placeholder={"Имя"}
-            onChange={(e) => setValue(e.target.value)}
-            // value={value}
+            onChange={onChange}
+            value={value}
             name={"name"}
             // error={false}
             // ref={inputRef}
@@ -75,13 +119,54 @@ function Profile() {
             extraClass="ml-1"
             icon="EditIcon"
           />
-          <EmailInput onChange={onChange} name={"email"} isIcon={true} />
+          <EmailInput
+            onChange={onEmailChange}
+            value={emailValue}
+            name={"email"}
+            isIcon={true}
+          />
           <PasswordInput
-            onChange={onChange}
+            onChange={onPasswordChange}
+            value={passwordValue}
             name={"password"}
-            extraClass="mb-6"
+            // extraClass="mb-6"
             icon="EditIcon"
           />
+          <div
+            className={
+              value !== customer.name || emailValue !== customer.email
+                ? `${styles.saveContainer}`
+                : `${styles.container_none}`
+            }
+          >
+            <Button
+              htmlType="button"
+              type="secondary"
+              size="medium"
+              onClick={() => {
+                setEmailValue(customer.email);
+                setValue(customer.name);
+              }}
+            >
+              Отмена
+            </Button>
+            <Button
+              htmlType="button"
+              type="primary"
+              size="medium"
+              onClick={() => {
+                console.log(value, emailValue);
+                updateUserInformation(value, emailValue, passwordValue)
+                  .then((data) => {
+                    console.log("data", data);
+                    dispatch({ type: UPDATE_SUCCESS, payload: data.user });
+                  })
+                  .catch((err) => console.log("err", err));
+              }}
+            >
+              Сохранить
+            </Button>
+          </div>
         </div>
       </div>
     </>

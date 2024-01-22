@@ -12,9 +12,12 @@ import { OPEN_MODAL_ORDER } from "../services/actions/modal";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { addIngredient } from "../services/actions/addIngredient";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getProfileData } from "../utils/api";
 
 function HomePage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const clickBun = (bun) => {
     dispatch(addIngredient(bun));
@@ -37,6 +40,11 @@ function HomePage() {
 
   React.useEffect(() => {
     dispatch(getIngredients());
+    // getProfileData()
+    //   .then((res) => {
+    //     console.log("user", res);
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
 
   const [isOpenModalOrder, setOpenModalOrder] = React.useState(false);
@@ -55,6 +63,7 @@ function HomePage() {
     setIngredientInfo(info);
     setOpenIngredient(ingredientOpen ? false : true);
     dispatch({ type: REMOVE_CURRENT_INGREDIENT });
+    // navigate(-1);
   };
 
   const modalOrderOpen = useSelector((store) => store.modal.isOpen);
@@ -63,10 +72,30 @@ function HomePage() {
     dispatch(addIngredient(item));
   };
 
+  let location = useLocation();
+  let background = location.state;
+  console.log(background);
+
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <DndProvider backend={HTML5Backend}>
+        <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
+        <BurgerConstructor onDropHandler={onDropHandler} />(
+        {modalOrderOpen && (
+          <Modal title="" onClose={handleModalOrder}>
+            <OrderDetails />
+          </Modal>
+        )}
+        ) (
+        {/* {ingredientOpen && ingredientInfo && (
+          <Modal title="Детали ингредиента" onClose={ingredientOpener}>
+            <IngredientDetails data={ingredientInfo} />
+          </Modal>
+        )} */}
+        )
+      </DndProvider>
+      {/* <DndProvider backend={HTML5Backend}>
         <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
         <BurgerConstructor onDropHandler={onDropHandler} />(
         {modalOrderOpen && (
@@ -81,7 +110,7 @@ function HomePage() {
           </Modal>
         )}
         )
-      </DndProvider>
+      </DndProvider> */}
     </>
   );
 }
