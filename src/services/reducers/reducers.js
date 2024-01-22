@@ -12,7 +12,7 @@ import { modalReducer } from "./modalReducer";
 import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
 import { customerReducer } from "./customerReducer";
-import { loginReducer } from "./login";
+// import { loginReducer } from "./login";
 import { setUserReducer } from "./setUserReducer";
 
 const initialState = {

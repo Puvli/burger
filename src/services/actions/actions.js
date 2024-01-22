@@ -79,17 +79,19 @@ export const makeNewOrder = (id) => (dispatch) => {
 };
 
 export const getUser = (dispatch) => {
-  return fetchGetUser().then((res) => {
-    if (res.success) {
-      dispatch({
-        type: SET_IS_AUTH_CHECKED,
-        payload: true,
-      });
-      // dispatch(setIsAuthChecked(true));
-      localStorage.setItem("accessToken", res.accessToken);
-      localStorage.setItem("refreshToken", res.refreshToken);
-    } else {
-      console.log(res.message);
-    }
-  });
+  return fetchGetUser()
+    .then((res) => {
+      if (res.success) {
+        dispatch({
+          type: SET_IS_AUTH_CHECKED,
+          payload: true,
+        });
+        // dispatch(setIsAuthChecked(true));
+        localStorage.setItem("accessToken", res.accessToken);
+        localStorage.setItem("refreshToken", res.refreshToken);
+      } else {
+        console.log(res.message);
+      }
+    })
+    .catch((err) => console.log("err", err));
 };

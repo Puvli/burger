@@ -54,7 +54,13 @@ function Login() {
         <h2 className={`text text_type_main-large pb-6 ${styles.title}`}>
           Вход
         </h2>
-        <div className={styles.subcontainer}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onEnterButton();
+          }}
+          className={styles.subcontainer}
+        >
           <EmailInput
             onChange={onChange}
             name={"email"}
@@ -67,16 +73,16 @@ function Login() {
             extraClass="mb-6"
             value={passwordValue}
           />
-        </div>
-        <Button
-          htmlType="button"
-          type="primary"
-          size="large"
-          extraClass="mb-20"
-          onClick={onEnterButton}
-        >
-          Войти
-        </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="large"
+            extraClass="mb-20"
+            // onClick={onEnterButton}
+          >
+            Войти
+          </Button>
+        </form>
         <div className={styles.login_container}>
           <div className={styles.login}>
             <p className="text text_type_main-default text_color_inactive">
