@@ -70,7 +70,7 @@ function Login() {
           <PasswordInput
             onChange={onPasswordChange}
             name={"password"}
-            extraClass="mb-6"
+            // extraClass="mb-6"
             value={passwordValue}
           />
           <Button

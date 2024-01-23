@@ -62,7 +62,13 @@ function Register() {
         <h2 className={`text text_type_main-large pb-6 ${styles.title}`}>
           Регистрация
         </h2>
-        <div className={styles.subcontainer}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onRegister();
+          }}
+          className={styles.subcontainer}
+        >
           <Input
             type={"text"}
             placeholder={"Имя"}
@@ -81,19 +87,19 @@ function Register() {
           <PasswordInput
             onChange={onPasswordChange}
             name={"password"}
-            extraClass="mb-6"
+            // extraClass="mb-6"
             value={passwordValue}
           />
-        </div>
-        <Button
-          htmlType="button"
-          type="primary"
-          size="large"
-          extraClass="mb-20"
-          onClick={onRegister}
-        >
-          Зарегистрироваться
-        </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="large"
+            extraClass="mb-20"
+            // onClick={onRegister}
+          >
+            Зарегистрироваться
+          </Button>
+        </form>
         <div className={styles.login}>
           <p className="text text_type_main-default text_color_inactive">
             Уже зарегистрированы?

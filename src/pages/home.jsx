@@ -40,11 +40,6 @@ function HomePage() {
 
   React.useEffect(() => {
     dispatch(getIngredients());
-    // getProfileData()
-    //   .then((res) => {
-    //     console.log("user", res);
-    //   })
-    //   .catch((err) => console.log(err));
   }, []);
 
   const [isOpenModalOrder, setOpenModalOrder] = React.useState(false);
@@ -78,7 +73,6 @@ function HomePage() {
 
   return (
     <>
-      {/* <AppHeader /> */}
       <DndProvider backend={HTML5Backend}>
         <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
         <BurgerConstructor onDropHandler={onDropHandler} />(
@@ -87,30 +81,8 @@ function HomePage() {
             <OrderDetails />
           </Modal>
         )}
-        ) (
-        {/* {ingredientOpen && ingredientInfo && (
-          <Modal title="Детали ингредиента" onClose={ingredientOpener}>
-            <IngredientDetails data={ingredientInfo} />
-          </Modal>
-        )} */}
         )
       </DndProvider>
-      {/* <DndProvider backend={HTML5Backend}>
-        <BurgerIngredients onOpen={ingredientOpener} addToOrder={addToOrder} />
-        <BurgerConstructor onDropHandler={onDropHandler} />(
-        {modalOrderOpen && (
-          <Modal title="" onClose={handleModalOrder}>
-            <OrderDetails />
-          </Modal>
-        )}
-        ) (
-        {ingredientOpen && ingredientInfo && (
-          <Modal title="Детали ингредиента" onClose={ingredientOpener}>
-            <IngredientDetails data={ingredientInfo} />
-          </Modal>
-        )}
-        )
-      </DndProvider> */}
     </>
   );
 }
