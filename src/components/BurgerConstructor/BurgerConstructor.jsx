@@ -15,6 +15,7 @@ import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
 import { DRAG_IN_CONSTRUCTOR } from "../../services/actions/drag";
 import { useDrop, useDrag } from "react-dnd";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BurgerComponent = ({ item, index }) => {
   const style = {
@@ -166,6 +167,9 @@ const Info = () => {
     ? orderList.items.reduce((sum, item) => sum + item.price, 0)
     : 0;
 
+  const customer = useSelector((store) => store.customer);
+  const navigate = useNavigate();
+
   return (
     <div className={`${styles.info}`}>
       <div className={`${styles.info__price}`}>
@@ -177,7 +181,13 @@ const Info = () => {
         type="primary"
         size="large"
         extraClass="mr-4"
-        onClick={orderClick}
+        onClick={() => {
+          if (customer.isAuthChecked) {
+            orderClick();
+          } else if (orderList.items.length) {
+            navigate("/login");
+          }
+        }}
       >
         Оформить заказ
       </Button>

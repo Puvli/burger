@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { CURRENT_INGREDIENT } from "../../services/actions/modal";
 import { useDrag } from "react-dnd";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 const IngredientsMenu = ({ click, currentType, refs }) => {
   const handlePick = (e) => {
@@ -45,6 +46,8 @@ const IngredientsItems = {
 const BurgerIngredient = ({ element, onOpen, addToOrder }) => {
   const { image, price, name, _id } = element;
   const dispatch = useDispatch();
+  const location = useLocation();
+  const ingredientId = _id;
 
   const [{ isDrag }, ingredientRef] = useDrag({
     type: "ingredient",
@@ -74,15 +77,27 @@ const BurgerIngredient = ({ element, onOpen, addToOrder }) => {
     // addClick(type, _id);
   };
 
+  console.log("location", location);
+
   return (
     !isDrag && (
       <li className={`${styles.ingredient} pt-6`} ref={ingredientRef}>
-        <img
-          src={image}
-          alt={name}
-          className="pl-4 pr-4"
-          onClick={handleOnOpen}
-        />
+        <Link
+          key={ingredientId}
+          // Тут мы формируем динамический путь для нашего ингредиента
+          to={`/ingredients/${ingredientId}`}
+          // а также сохраняем в свойство background роут,
+          // на котором была открыта наша модалка
+          state={{ background: location }}
+          className={styles.link}
+        >
+          <img
+            src={image}
+            alt={name}
+            className="pl-4 pr-4"
+            onClick={handleOnOpen}
+          />
+        </Link>
         <div className={`${styles.currency}`}>
           <p
             className="text text_type_digits-default"

@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  align-items: center;
+  margin-top: 208px;
+  justify-content: center;
+  gap: 60px;
+}
+
+.tabContainer {
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 60px; */
+}
+
+.saveContainer {
+  display: flex;
+  /* gap: 20px; */
+  align-self: flex-end;
+}
+
+.container_none {
+  display: none;
+}
+
+.tabParagraph {
+  width: 320px;
+  height: 64px;
+  text-decoration: none;
+  color: #8585AD;
+  cursor: pointer;
+}
+
+.tabParagraph_active {
+  color: #f2f2f3;
+}
+
+.tabSubParagraph {
+  max-width: 320px;
+  width: 100%;
+}
+
+.title {
+  /* width: 100%; */
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.subcontainer {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  /* justify-content: start */
+  align-items: center;
+  gap: 24px;
+}
+
+.button {
+  margin: 0;
+  padding: 0;
+}
+
+.login {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}

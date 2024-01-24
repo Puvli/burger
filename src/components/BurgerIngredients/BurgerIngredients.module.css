@@ -12,6 +12,11 @@
   width: 272px;
 }
 
+.link {
+  text-decoration: none;
+  color: white;
+}
+
 .text {
   text-align: center;
 }

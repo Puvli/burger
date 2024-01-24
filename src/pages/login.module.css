@@ -1,0 +1,43 @@
+.container {
+  /* margin-top: 88px; */
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  max-width: 480px;
+  align-items: center;
+  margin-top: 180px;
+}
+
+.title {
+  /* width: 100%; */
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.subcontainer {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: start */
+  align-items: center;
+  gap: 24px;
+}
+
+.button {
+  margin: 0;
+  padding: 0;
+}
+
+.login_container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}

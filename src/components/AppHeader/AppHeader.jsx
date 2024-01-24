@@ -6,8 +6,10 @@ import {
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-const NavLink = ({ isActive, name, children }) => {
+const NavLink = ({ isActive, name, children, onClick }) => {
+
   return (
     <li className={`${styles.header__navLink} pl-5 pr-5`}>
       {children}
@@ -15,6 +17,7 @@ const NavLink = ({ isActive, name, children }) => {
         className={` ${
           !isActive && "text_color_inactive"
         } pl-2 text text_type_main-default`}
+        onClick={onClick}
       >
         {name}
       </p>
@@ -36,12 +39,22 @@ const NavLinks = () => {
 };
 
 function AppHeader() {
+  const navigate = useNavigate();
+
+  const onCabinetClick = () => {
+    navigate("/profile");
+  };
+
   return (
     <header className={`${styles.header}`}>
       <nav className={`${styles.header__container}`}>
         <NavLinks />
         <Logo />
-        <NavLink name="Личный кабинет" isActive={false}>
+        <NavLink
+          name="Личный кабинет"
+          isActive={false}
+          onClick={onCabinetClick}
+        >
           <ProfileIcon type="secondary" />
         </NavLink>
       </nav>
