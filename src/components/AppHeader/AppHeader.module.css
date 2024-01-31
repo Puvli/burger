@@ -30,6 +30,8 @@
   gap: 8px;
   margin: 0;
   padding: 0;
+  text-decoration: none;
+  color: white;
 }
 
 .header__navLink:hover {

@@ -1,0 +1,34 @@
+.container {
+  margin-top: 88px;
+  display: flex;
+  flex-direction: column;
+  /* gap: 56px; */
+}
+
+.subcontainer {
+  display: flex;
+  gap: 56px;
+}
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 450px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order {
+  margin: 0;
+  padding: 0;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}

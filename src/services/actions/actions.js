@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
   fetchGetUser,
+  getOrder,
   getOrderNumber,
   getProfileData,
   ingredientsApi,
@@ -20,6 +21,8 @@ export const UPDATE_SUCCESS = "UPDATE_SUCCESS";
 export const SET_IS_AUTH_CHECKED = "SET_IS_AUTH_CHECKED";
 export const SET_USER = "SET_USER";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+
+export const POPUP_ORDER = "POPUP_ORDER";
 
 export const logIn = (payload) => (dispatch) => {
   return loginApi(payload)
@@ -94,4 +97,15 @@ export const getUser = (dispatch) => {
       }
     })
     .catch((err) => console.log("err", err));
+};
+
+export const getDataOfOrder = (id) => (dispatch) => {
+  getOrder(id)
+    .then((res) => {
+      if (res.success) {
+        dispatch({ type: POPUP_ORDER, payload: res });
+        console.log("zapros", res);
+      }
+    })
+    .catch((err) => console.log(err));
 };

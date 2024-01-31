@@ -41,39 +41,19 @@ export const refreshToken = () => {
   });
 };
 
-// export const fetchWithRefresh = async (url, options) => {
-//   try {
-//     // const res = await request(url, options);
-//     console.log("we are here!");
-//     return await request(url, options);
-//   } catch (err) {
-//     console.log(err.message);
-//     if (err) {
-//       console.log("expired!");
-//       const refreshData = await refreshToken(); //обновляем токен
-//       if (!refreshData.success) {
-//         console.log("err expired!");
-//         return Promise.reject(refreshData);
-//       }
-//       localStorage.setItem("refreshToken", refreshData.refreshToken);
-//       localStorage.setItem("accessToken", refreshData.accessToken);
-//       options.headers.authorization = refreshData.accessToken;
-//       // const res = await request(url, options); //повторяем запрос
-//       // return await checkResponse(res);
-//       return await request(url, options);
-//     } else {
-//       return Promise.reject((err) => console.log("fuckedup", err));
-//     }
-//   }
-// };
-
 export function ingredientsApi() {
   return request("ingredients", { headers, method: "GET" });
 }
 
 export const getOrderNumber = (id) => {
-  return request("orders", {
-    headers,
+  const accessToken = localStorage.getItem("accessToken");
+  return request(`orders`, {
+    // return request("orders", {
+    // headers,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("accessToken"),
+    },
     method: "POST",
     body: JSON.stringify(id),
   });
@@ -142,6 +122,13 @@ export const updateUserInformation = (name, email, password) => {
     },
     method: "PATCH",
     body: JSON.stringify({ name, email, password }),
+  });
+};
+
+export const getOrder = (id) => {
+  return request(`orders/${id}`, {
+    headers: headers,
+    method: "GET",
   });
 };
 

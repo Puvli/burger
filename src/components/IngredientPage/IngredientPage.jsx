@@ -29,7 +29,6 @@ const IngredientPage = () => {
   console.log("data4", data);
 
   useEffect(() => {
-    console.log("ты меня вообще слышишь?");
     dispatch(getIngredients());
   }, []);
 

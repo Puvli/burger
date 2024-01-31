@@ -13,6 +13,7 @@ import {
   Route,
   useNavigate,
   NavLink,
+  useLocation,
 } from "react-router-dom";
 import styles from "./profile.module.css";
 import {
@@ -31,6 +32,8 @@ import {
 } from "../services/actions/actions";
 
 function Profile() {
+  const location = useLocation();
+
   const [value, setValue] = React.useState("");
 
   const [passwordValue, setPasswordValue] = React.useState("bob@example.com");
@@ -74,11 +77,12 @@ function Profile() {
           {/* <p className={`text text_type_main-medium ${styles.tabParagraph}`}>
             Профиль
           </p> */}
-          <p
+          <NavLink
+            to={{ pathname: "/profile/orders" }}
             className={`text text_type_main-medium text_color_inactive ${styles.tabParagraph}`}
           >
             История заказов
-          </p>
+          </NavLink>
           <p
             className={`text text_type_main-medium text_color_inactive ${styles.tabParagraph}`}
             onClick={() => {
@@ -88,9 +92,7 @@ function Profile() {
                     localStorage.removeItem("refreshToken");
                     localStorage.removeItem("accessToken");
                     dispatch({ type: LOGOUT_SUCCESS });
-                    // localStorage.removeItem("userId");
                     navigate("/login");
-                    // console.log(res);
                   }
                 }
               );
@@ -104,7 +106,18 @@ function Profile() {
             В этом разделе вы можете изменить свои персональные данные
           </p>
         </div>
-        <div className={styles.subcontainer}>
+        <form
+          className={styles.subcontainer}
+          onSubmit={() => {
+            console.log(value, emailValue);
+            updateUserInformation(value, emailValue, passwordValue)
+              .then((data) => {
+                console.log("data", data);
+                dispatch({ type: UPDATE_SUCCESS, payload: data.user });
+              })
+              .catch((err) => console.log("err", err));
+          }}
+        >
           <Input
             type={"text"}
             placeholder={"Имя"}
@@ -150,24 +163,11 @@ function Profile() {
             >
               Отмена
             </Button>
-            <Button
-              htmlType="button"
-              type="primary"
-              size="medium"
-              onClick={() => {
-                console.log(value, emailValue);
-                updateUserInformation(value, emailValue, passwordValue)
-                  .then((data) => {
-                    console.log("data", data);
-                    dispatch({ type: UPDATE_SUCCESS, payload: data.user });
-                  })
-                  .catch((err) => console.log("err", err));
-              }}
-            >
+            <Button htmlType="submit" type="primary" size="medium">
               Сохранить
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

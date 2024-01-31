@@ -154,13 +154,16 @@ const BurgerComponents = () => {
 const Info = () => {
   const dispatch = useDispatch();
   const orderList = useSelector((store) => store.ingredients.clickedIngredient);
+  let isDisabled = orderList.bun && orderList.items.length > 0;
   const orderClick = () => {
-    const bunsOrder = [orderList.bun._id, orderList.bun._id];
-    const itemsOrder = orderList.items.map((item) => item._id);
-    dispatch(makeNewOrder({ ingredients: [...bunsOrder, ...itemsOrder] }));
-    dispatch({
-      type: OPEN_MODAL_ORDER,
-    });
+    if (isDisabled) {
+      const bunsOrder = [orderList.bun._id, orderList.bun._id];
+      const itemsOrder = orderList.items.map((item) => item._id);
+      dispatch(makeNewOrder({ ingredients: [...bunsOrder, ...itemsOrder] }));
+      dispatch({
+        type: OPEN_MODAL_ORDER,
+      });
+    }
   };
   const bunPrice = orderList.bun ? orderList.bun.price * 2 : 0;
   const itemsPrices = orderList.items
@@ -181,6 +184,7 @@ const Info = () => {
         type="primary"
         size="large"
         extraClass="mr-4"
+        disabled={!isDisabled}
         onClick={() => {
           if (customer.isAuthChecked) {
             orderClick();

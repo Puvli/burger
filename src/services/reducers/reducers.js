@@ -12,8 +12,9 @@ import { modalReducer } from "./modalReducer";
 import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
 import { customerReducer } from "./customerReducer";
-// import { loginReducer } from "./login";
-import { setUserReducer } from "./setUserReducer";
+import { socketReducer } from "../socket/reducer";
+import { userSocketReducer } from "../user/reducer";
+import { orderData } from "./orderData";
 
 const initialState = {
   clickedIngredient: {
@@ -48,7 +49,6 @@ const reducer = (state = initialState, action) => {
           },
         };
       }
-      break;
     case DELETE_INGREDIENTS:
       return {
         ...state,
@@ -107,5 +107,7 @@ export const rootReducer = combineReducers({
   number: makeNewOrder,
   loadedIngredients: loadIngredients,
   customer: customerReducer,
-  // isAuthChecked: setUserReducer,
+  socket: socketReducer,
+  orderPopupData: orderData,
+  // userSocket: userSocketReducer,
 });

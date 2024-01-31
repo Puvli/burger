@@ -6,11 +6,13 @@ const initialState = {
 
 export const makeNewOrder = (state = initialState, action) => {
   switch (action.type) {
-    case MAKE_NEW_ORDER:
+    case MAKE_NEW_ORDER: {
+      console.log(action.payload);
       return {
         ...state,
         number: action.payload.number,
       };
+    }
 
     default: {
       return state;
