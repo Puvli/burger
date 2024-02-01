@@ -1,7 +1,5 @@
-import { useState } from "react";
 import styles from "./CardOrder.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 const IngredientImage = ({ image }) => {
@@ -14,31 +12,7 @@ const IngredientImage = ({ image }) => {
   );
 };
 
-// const OrderStatusText = ({ status }) => {
-//   if (status === "done") {
-//     return (
-//       <span
-//         className={`${styles.status} ${styles.span_active} text text_type_main-default`}
-//       >
-//         Выполнен
-//       </span>
-//     );
-//   } else if (status === "pending") {
-//     return (
-//       <span className={`${styles.status} text text_type_main-default`}>
-//         Готовится
-//       </span>
-//     );
-//   } else if (status === "created") {
-//     return (
-//       <span className={`${styles.status} text text_type_main-default`}>
-//         Создан
-//       </span>
-//     );
-//   }
-// };
-
-export default function CardOrder({ name, number, timestap, images, status }) {
+export default function CardOrder({ name, number, timestap, images }) {
   const location = useLocation();
   const uniqueSecond = (mas1) => {
     return mas1.filter(
@@ -84,7 +58,7 @@ export default function CardOrder({ name, number, timestap, images, status }) {
 
     return formattedString;
   };
-  
+
   const time = timestap;
 
   const result = formattedTime(time);
@@ -135,8 +109,9 @@ export default function CardOrder({ name, number, timestap, images, status }) {
                   <li
                     className={`${styles.image_container} ${count}`}
                     style={{ zIndex: zindex }}
+                    key={id}
                   >
-                    <IngredientImage image={image} key={id} />
+                    <IngredientImage image={image} />
 
                     <span
                       className={`${styles.count} ${visible} text text_type_digits-default`}

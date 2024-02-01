@@ -4,7 +4,6 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { useParams, useResolvedPath } from "react-router-dom";
 import { useEffect } from "react";
 import { connect, disconnect } from "../services/socket/actions";
-import { getIngredients } from "../services/actions/actions";
 const url = "wss://norma.nomoreparties.space/orders/all";
 
 const FeedOrder = ({ popup }) => {
@@ -16,7 +15,6 @@ const FeedOrder = ({ popup }) => {
   const { all } = ingredientsAll;
   useEffect(() => {
     dispatch(connect(url));
-    dispatch(getIngredients());
     return () => {
       dispatch(disconnect());
     };
@@ -91,7 +89,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return `#${order.number}`;
             }
           })}
@@ -101,7 +98,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return order.name;
             }
           })}
@@ -111,7 +107,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return order.status;
             }
           })}
@@ -123,7 +118,6 @@ const FeedOrder = ({ popup }) => {
           orders.map((order) => {
             if (order.number === +orderNumber) {
               return makeMas(order.ingredients).map((ingredient, id) => {
-                console.log(ingredient);
                 return (
                   <li className={`${styles.ingredient}`} key={id}>
                     <div className={`${styles.ingredient_intro}`}>
@@ -160,7 +154,6 @@ const FeedOrder = ({ popup }) => {
               orders &&
               orders.map((order) => {
                 if (order.number === +orderNumber) {
-                  console.log("order", order);
                   return formattedTime(order.createdAt)
                 }
               })}
@@ -171,7 +164,6 @@ const FeedOrder = ({ popup }) => {
               orders &&
               orders.map((order) => {
                 if (order.number === +orderNumber) {
-                  console.log("makemas", makeMas(order.ingredients));
                   return sumPrices(makeMas(order.ingredients));
                 }
               })}

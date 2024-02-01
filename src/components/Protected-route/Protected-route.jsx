@@ -6,9 +6,9 @@ const Protected = ({ onlyUnAuth = false, component }) => {
   const customer = useSelector((store) => store.customer);
   const location = useLocation();
 
-  //   if (!customer.isAuthChecked) {
-  //     return null; // здесь можно вернуть прелоадер. Глянуть в библиотеке
-  //   }
+    // if (!customer.isAuthChecked) {
+    //   return null; // здесь можно вернуть прелоадер. Глянуть в библиотеке
+    // }
 
   if (onlyUnAuth && customer.email && customer.name) {
     const { from } = location.state || { from: { pathname: "/" } };

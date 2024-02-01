@@ -13,7 +13,6 @@ import { makeNewOrder } from "./makeNewOder";
 import { loadIngredients } from "./loadIngredients";
 import { customerReducer } from "./customerReducer";
 import { socketReducer } from "../socket/reducer";
-import { userSocketReducer } from "../user/reducer";
 import { orderData } from "./orderData";
 
 const initialState = {
@@ -109,5 +108,4 @@ export const rootReducer = combineReducers({
   customer: customerReducer,
   socket: socketReducer,
   orderPopupData: orderData,
-  // userSocket: userSocketReducer,
 });

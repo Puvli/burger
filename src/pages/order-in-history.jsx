@@ -55,7 +55,6 @@ const OrderInHistory = ({ popup }) => {
 
   useEffect(() => {
     dispatch(connect(url));
-    dispatch(getIngredients());
     dispatch(getDataOfOrder(orderHistoryNumber));
     return () => {
       dispatch(disconnect());
@@ -76,7 +75,6 @@ const OrderInHistory = ({ popup }) => {
       sumPrices(makeMas(orderPopupDataElem.ingredients))
     );
   };
-
 
   const moment = require("moment");
 
@@ -109,7 +107,8 @@ const OrderInHistory = ({ popup }) => {
             if (order.number === +orderHistoryNumber) {
               return `#${order.number}`;
             }
-          })}
+          }) &&
+          orderHistoryNumber}
       </span>
       <p className={`text text_type_main-medium mb-2 ${styles.paragraph}`}>
         {success &&
@@ -119,6 +118,7 @@ const OrderInHistory = ({ popup }) => {
               return order.name;
             }
           }) &&
+          popupSuccess &&
           elem.name}
       </p>
       <p className={`${styles.paragraph_done} text text_type_main-default`}>
@@ -129,6 +129,7 @@ const OrderInHistory = ({ popup }) => {
               return order.status;
             }
           }) &&
+          popupSuccess &&
           elem.status}
       </p>
       <ul className={`${styles.ingredients} ${styles.scroll}`}>
@@ -168,6 +169,7 @@ const OrderInHistory = ({ popup }) => {
               });
             }
           }) &&
+          popupSuccess &&
           makeMas(elem.ingredients).map((ingredient, id) => {
             return (
               <li className={`${styles.ingredient}`} key={id}>
@@ -208,6 +210,7 @@ const OrderInHistory = ({ popup }) => {
                 return formattedTime(order.createdAt);
               }
             }) &&
+            popupSuccess &&
             formattedTime(elem.createdAt)}
         </p>
         <div className={`${styles.number_container}`}>
@@ -219,6 +222,7 @@ const OrderInHistory = ({ popup }) => {
                   return sumPrices(makeMas(order.ingredients));
                 }
               }) &&
+              popupSuccess &&
               resultSum()}
           </p>
           <CurrencyIcon />
