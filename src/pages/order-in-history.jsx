@@ -117,8 +117,6 @@ const OrderInHistory = ({ popup }) => {
             }
           }) &&
           orderHistoryNumber}
-          }) &&
-          orderHistoryNumber}
       </span>
       <p className={`text text_type_main-medium mb-2 ${styles.paragraph}`}>
         {success &&
