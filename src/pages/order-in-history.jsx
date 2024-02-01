@@ -117,6 +117,8 @@ const OrderInHistory = ({ popup }) => {
             }
           }) &&
           orderHistoryNumber}
+          }) &&
+          orderHistoryNumber}
       </span>
       <p className={`text text_type_main-medium mb-2 ${styles.paragraph}`}>
         {success &&
@@ -126,6 +128,7 @@ const OrderInHistory = ({ popup }) => {
               return order.name;
             }
           }) &&
+          popupSuccess &&
           popupSuccess &&
           elem.name}
       </p>
@@ -137,6 +140,7 @@ const OrderInHistory = ({ popup }) => {
               return order.status;
             }
           }) &&
+          popupSuccess &&
           popupSuccess &&
           elem.status}
       </p>
@@ -221,6 +225,7 @@ const OrderInHistory = ({ popup }) => {
               }
             }) &&
             popupSuccess &&
+            popupSuccess &&
             formattedTime(elem.createdAt)}
         </p>
         <div className={`${styles.number_container}`}>
@@ -232,6 +237,7 @@ const OrderInHistory = ({ popup }) => {
                   return sumPrices(makeMas(order.ingredients));
                 }
               }) &&
+              popupSuccess &&
               popupSuccess &&
               resultSum()}
           </p>
