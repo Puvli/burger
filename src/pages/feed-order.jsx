@@ -4,7 +4,6 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { useParams, useResolvedPath } from "react-router-dom";
 import { useEffect } from "react";
 import { connect, disconnect } from "../services/socket/actions";
-import { getIngredients } from "../services/actions/actions";
 const url = "wss://norma.nomoreparties.space/orders/all";
 
 const FeedOrder = ({ popup }) => {
@@ -16,7 +15,6 @@ const FeedOrder = ({ popup }) => {
   const { all } = ingredientsAll;
   useEffect(() => {
     dispatch(connect(url));
-    dispatch(getIngredients());
     return () => {
       dispatch(disconnect());
     };
@@ -77,7 +75,16 @@ const FeedOrder = ({ popup }) => {
 
     return formattedString;
   };
-  
+
+  const uniqueSecond = (mas1) => {
+    return mas1.filter(
+      (elem, index, self) =>
+        self.findIndex((el) => el.ingredient._id === elem.ingredient._id) ===
+        index
+    );
+  };
+
+  // const uniqueOrders = success && uniqueSecond(orders.ingredients);
   // const time = timestap;
 
   // const result = formattedTime(time);
@@ -91,7 +98,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return `#${order.number}`;
             }
           })}
@@ -101,7 +107,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return order.name;
             }
           })}
@@ -111,7 +116,6 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              console.log(order.number, orderNumber);
               return order.status;
             }
           })}
@@ -122,48 +126,50 @@ const FeedOrder = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderNumber) {
-              return makeMas(order.ingredients).map((ingredient, id) => {
-                console.log(ingredient);
-                return (
-                  <li className={`${styles.ingredient}`} key={id}>
-                    <div className={`${styles.ingredient_intro}`}>
-                      <div className={`${styles.intro_sub}`}>
-                        <div className={styles.image_container}><img
-                          className={`${styles.image}`}
-                          src={ingredient.ingredient.image}
-                          alt={ingredient.ingredient.image}
-                        /></div>
-                        <p
-                          className={`${styles.ingredient_paragraph} text text_type_main-default`}
-                        >
-                          {ingredient.ingredient.name}
-                        </p>
+              return uniqueSecond(makeMas(order.ingredients)).map(
+                (ingredient, id) => {
+                  return (
+                    <li className={`${styles.ingredient}`} key={id}>
+                      <div className={`${styles.ingredient_intro}`}>
+                        <div className={`${styles.intro_sub}`}>
+                          <div className={styles.image_container}>
+                            <img
+                              className={`${styles.image}`}
+                              src={ingredient.ingredient.image}
+                              alt={ingredient.ingredient.image}
+                            />
+                          </div>
+                          <p
+                            className={`${styles.ingredient_paragraph} text text_type_main-default`}
+                          >
+                            {ingredient.ingredient.name}
+                          </p>
+                        </div>
+                        <div className={`${styles.number_container}`}>
+                          <p
+                            className={`${styles.number} text text_type_digits-default`}
+                          >
+                            {`${ingredient.count} x ${ingredient.ingredient.price}`}
+                          </p>
+                          <CurrencyIcon />
+                        </div>
                       </div>
-                      <div className={`${styles.number_container}`}>
-                        <p
-                          className={`${styles.number} text text_type_digits-default`}
-                        >
-                          {`${ingredient.ingredient.price} x ${ingredient.count}`}
-                        </p>
-                        <CurrencyIcon />
-                      </div>
-                    </div>
-                  </li>
-                );
-              });
+                    </li>
+                  );
+                }
+              );
             }
           })}
       </ul>
       <div className={`${styles.time_container}`}>
         <p className="text text_type_main-default text_color_inactive">
-        {success &&
-              orders &&
-              orders.map((order) => {
-                if (order.number === +orderNumber) {
-                  console.log("order", order);
-                  return formattedTime(order.createdAt)
-                }
-              })}
+          {success &&
+            orders &&
+            orders.map((order) => {
+              if (order.number === +orderNumber) {
+                return formattedTime(order.createdAt);
+              }
+            })}
         </p>
         <div className={`${styles.number_container}`}>
           <p className={`${styles.number} text text_type_digits-default`}>
@@ -171,7 +177,6 @@ const FeedOrder = ({ popup }) => {
               orders &&
               orders.map((order) => {
                 if (order.number === +orderNumber) {
-                  console.log("makemas", makeMas(order.ingredients));
                   return sumPrices(makeMas(order.ingredients));
                 }
               })}

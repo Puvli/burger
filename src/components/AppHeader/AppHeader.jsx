@@ -32,7 +32,6 @@ const NavLink = ({ name, children, path }) => {
 };
 
 const NavLinks = () => {
-  // const navigate = useNavigate();
   const location = useLocation();
 
   const [constructorActive, setConstructorActive] = useState("primary");
@@ -66,6 +65,8 @@ const NavLinks = () => {
 function AppHeader() {
   const [profileActive, setProfileActive] = useState("secondary");
 
+  const navigate = useNavigate();
+
   const location = useLocation();
 
   useEffect(() => {
@@ -80,7 +81,9 @@ function AppHeader() {
     <header className={`${styles.header}`}>
       <nav className={`${styles.header__container}`}>
         <NavLinks />
-        <Logo />
+        <NavLink path={"/"} isActive={false} name="">
+          <Logo />
+        </NavLink>
         <NavLink name="Личный кабинет" isActive={false} path="/profile">
           <ProfileIcon type={profileActive} />
         </NavLink>

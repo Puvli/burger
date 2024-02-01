@@ -1,30 +1,14 @@
 import AppHeader from "../AppHeader/AppHeader";
-import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
-import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
-import OrderDetails from "../OrderDetails/OrderDetails";
 import Modal from "../Modal/Modal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   AUTH_SUCCESS,
   SET_IS_AUTH_CHECKED,
   getIngredients,
 } from "../../services/actions/actions";
-import { REMOVE_CURRENT_INGREDIENT } from "../../services/actions/modal";
-import { OPEN_MODAL_ORDER } from "../../services/actions/modal";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { addIngredient } from "../../services/actions/addIngredient";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-  Router,
-  createBrowserRouter,
-} from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
 import Register from "../../pages/register";
 import Login from "../../pages/login";
@@ -52,14 +36,12 @@ export default function App() {
   };
 
   useEffect(() => {
+    dispatch(getIngredients());
+
     if (localStorage.getItem("accessToken")) {
       fetchGetUser()
         .then((data) => {
-          console.log("data", data);
           if (data.success) {
-            console.log("лол робит = ", data);
-            // setEmailValue(data.user.email);
-            // setValue(data.user.name);
             dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
             dispatch({ type: AUTH_SUCCESS, payload: data.user });
           }
@@ -77,9 +59,6 @@ export default function App() {
           fetchGetUser().then((data) => {
             console.log("new data", data);
             if (data.success) {
-              console.log("лол робит = ", data);
-              // setEmailValue(data.user.email);
-              // setValue(data.user.name);
               dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
               dispatch({ type: AUTH_SUCCESS, payload: data.user });
             }
@@ -92,13 +71,11 @@ export default function App() {
     <>
       <AppHeader />
       <Routes location={background || location}>
-        {/* <Route path="/feed" element={<OnlyUnAuth component={<Feed />} />} /> */}
         <Route path="/feed" element={<Feed />} />
         <Route
           path="/feed/:orderNumber"
           element={<OnlyUnAuth component={<FeedOrder popup={true} />} />}
         />
-        {/* <Route path="/feed/:orderNumber" element={<FeedOrder />} /> */}
         <Route path="/" element={<HomePage />} />
         <Route
           path="/register"
@@ -157,9 +134,13 @@ export default function App() {
           <Route
             path="/profile/orders/:orderHistoryNumber"
             element={
+              // <OnlyAuth
+              // component={
               <Modal title="" onClose={handleModalClose}>
-                <OrderInHistory popup={false} />
+                <OnlyAuth component={<OrderInHistory popup={false} />} />
               </Modal>
+              // }
+              // />
             }
           />
         </Routes>

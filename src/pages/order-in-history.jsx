@@ -55,7 +55,6 @@ const OrderInHistory = ({ popup }) => {
 
   useEffect(() => {
     dispatch(connect(url));
-    dispatch(getIngredients());
     dispatch(getDataOfOrder(orderHistoryNumber));
     return () => {
       dispatch(disconnect());
@@ -77,7 +76,6 @@ const OrderInHistory = ({ popup }) => {
     );
   };
 
-
   const moment = require("moment");
 
   const formattedTime = (timestamp) => {
@@ -98,6 +96,14 @@ const OrderInHistory = ({ popup }) => {
     return formattedString;
   };
 
+  const uniqueSecond = (mas1) => {
+    return mas1.filter(
+      (elem, index, self) =>
+        self.findIndex((el) => el.ingredient._id === elem.ingredient._id) ===
+        index
+    );
+  };
+
   return (
     <section className={`${styles.container} ${isPopup}`}>
       <span
@@ -109,7 +115,8 @@ const OrderInHistory = ({ popup }) => {
             if (order.number === +orderHistoryNumber) {
               return `#${order.number}`;
             }
-          })}
+          }) &&
+          orderHistoryNumber}
       </span>
       <p className={`text text_type_main-medium mb-2 ${styles.paragraph}`}>
         {success &&
@@ -119,6 +126,7 @@ const OrderInHistory = ({ popup }) => {
               return order.name;
             }
           }) &&
+          popupSuccess &&
           elem.name}
       </p>
       <p className={`${styles.paragraph_done} text text_type_main-default`}>
@@ -129,6 +137,7 @@ const OrderInHistory = ({ popup }) => {
               return order.status;
             }
           }) &&
+          popupSuccess &&
           elem.status}
       </p>
       <ul className={`${styles.ingredients} ${styles.scroll}`}>
@@ -136,39 +145,42 @@ const OrderInHistory = ({ popup }) => {
           orders &&
           orders.map((order) => {
             if (order.number === +orderHistoryNumber) {
-              return makeMas(order.ingredients).map((ingredient, id) => {
-                return (
-                  <li className={`${styles.ingredient}`} key={id}>
-                    <div className={`${styles.ingredient_intro}`}>
-                      <div className={`${styles.intro_sub}`}>
-                        <div className={styles.image_container}>
-                          <img
-                            className={`${styles.image}`}
-                            src={ingredient.ingredient.image}
-                            alt={ingredient.ingredient.image}
-                          />
+              return uniqueSecond(makeMas(order.ingredients)).map(
+                (ingredient, id) => {
+                  return (
+                    <li className={`${styles.ingredient}`} key={id}>
+                      <div className={`${styles.ingredient_intro}`}>
+                        <div className={`${styles.intro_sub}`}>
+                          <div className={styles.image_container}>
+                            <img
+                              className={`${styles.image}`}
+                              src={ingredient.ingredient.image}
+                              alt={ingredient.ingredient.image}
+                            />
+                          </div>
+                          <p
+                            className={`${styles.ingredient_paragraph} text text_type_main-default`}
+                          >
+                            {ingredient.ingredient.name}
+                          </p>
                         </div>
-                        <p
-                          className={`${styles.ingredient_paragraph} text text_type_main-default`}
-                        >
-                          {ingredient.ingredient.name}
-                        </p>
+                        <div className={`${styles.number_container}`}>
+                          <p
+                            className={`${styles.number} text text_type_digits-default`}
+                          >
+                            {`${ingredient.count} x ${ingredient.ingredient.price}`}
+                          </p>
+                          <CurrencyIcon />
+                        </div>
                       </div>
-                      <div className={`${styles.number_container}`}>
-                        <p
-                          className={`${styles.number} text text_type_digits-default`}
-                        >
-                          {`${ingredient.ingredient.price} x ${ingredient.count}`}
-                        </p>
-                        <CurrencyIcon />
-                      </div>
-                    </div>
-                  </li>
-                );
-              });
+                    </li>
+                  );
+                }
+              );
             }
           }) &&
-          makeMas(elem.ingredients).map((ingredient, id) => {
+          popupSuccess &&
+          uniqueSecond(makeMas(elem.ingredients)).map((ingredient, id) => {
             return (
               <li className={`${styles.ingredient}`} key={id}>
                 <div className={`${styles.ingredient_intro}`}>
@@ -208,6 +220,7 @@ const OrderInHistory = ({ popup }) => {
                 return formattedTime(order.createdAt);
               }
             }) &&
+            popupSuccess &&
             formattedTime(elem.createdAt)}
         </p>
         <div className={`${styles.number_container}`}>
@@ -219,6 +232,7 @@ const OrderInHistory = ({ popup }) => {
                   return sumPrices(makeMas(order.ingredients));
                 }
               }) &&
+              popupSuccess &&
               resultSum()}
           </p>
           <CurrencyIcon />

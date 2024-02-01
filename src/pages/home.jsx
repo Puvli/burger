@@ -67,10 +67,6 @@ function HomePage() {
     dispatch(addIngredient(item));
   };
 
-  let location = useLocation();
-  let background = location.state;
-  console.log(background);
-
   return (
     <>
       <DndProvider backend={HTML5Backend}>

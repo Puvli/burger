@@ -68,7 +68,7 @@ function HistroyOfOrders() {
   useEffect(() => {
     // dispatch(connect(url));
     dispatch(connectWithToken(userUrl));
-    dispatch(getIngredients());
+    // dispatch(getIngredients());
     return () => {
       dispatch(disconnect());
     };
@@ -76,7 +76,7 @@ function HistroyOfOrders() {
 
   const ingredientsAll = useSelector((store) => store.loadedIngredients);
   const { all } = ingredientsAll;
-  const zakazi = useSelector((store) => store.socket.userDone);
+  const zakazi = useSelector((store) => store.socket.done);
   const { orders, success } = zakazi;
   //   const anotherOrders = useSelector((store) => store.socket.done.orders);
 

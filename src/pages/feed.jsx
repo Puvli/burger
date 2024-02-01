@@ -18,7 +18,6 @@ export default function Feed() {
   const zakazi = useSelector((store) => store.socket.done);
   const { total, totalToday, orders, success } = zakazi;
   const anotherOrders = useSelector((store) => store.socket.done.orders);
-  console.log(anotherOrders);
 
   const findAndCount = (array, elem) => {
     return array.filter((e) => e === elem).length;
@@ -45,7 +44,7 @@ export default function Feed() {
 
   useEffect(() => {
     dispatch(connect(url));
-    dispatch(getIngredients());
+    // dispatch(getIngredients());
     return () => {
       dispatch(disconnect());
     };
@@ -62,14 +61,13 @@ export default function Feed() {
               // let orderNumber = order.number;
               const itemOfIngredient = makeMas(order.ingredients);
               return (
-                <li className={styles.order}>
+                <li className={styles.order} key={id}>
                   <CardOrder
                     name={order.name}
                     number={order.number}
                     timestap={order.createdAt}
                     status={null}
                     images={itemOfIngredient}
-                    key={id}
                   />
                 </li>
               );
