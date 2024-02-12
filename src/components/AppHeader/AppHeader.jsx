@@ -6,56 +6,86 @@ import {
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  useLocation,
+  useNavigate,
+  NavLink as AnotherLink,
+} from "react-router-dom";
 
-const NavLink = ({ isActive, name, children, onClick }) => {
-
+const NavLink = ({ name, children, path }) => {
   return (
     <li className={`${styles.header__navLink} pl-5 pr-5`}>
-      {children}
-      <p
-        className={` ${
-          !isActive && "text_color_inactive"
-        } pl-2 text text_type_main-default`}
-        onClick={onClick}
+      <AnotherLink
+        to={path}
+        className={({ isActive }) =>
+          isActive
+            ? `${styles.header__navLink} pl-2 text text_type_main-default`
+            : `${styles.header__navLink} pl-2 text text_type_main-default text_color_inactive`
+        }
       >
+        {children}
         {name}
-      </p>
+      </AnotherLink>
     </li>
   );
 };
 
 const NavLinks = () => {
+  const location = useLocation();
+
+  const [constructorActive, setConstructorActive] = useState("primary");
+  const [feedActive, setFeedActive] = useState("secondary");
+
+  useEffect(() => {
+    if (location.pathname === "/feed") {
+      setFeedActive("primary");
+      setConstructorActive("secondary");
+    } else if (location.pathname === "/") {
+      setFeedActive("secondary");
+      setConstructorActive("primary");
+    } else {
+      setFeedActive("secondary");
+      setConstructorActive("secondary");
+    }
+  }, [location.pathname]);
+
   return (
     <ul className={styles.header__navLinks}>
-      <NavLink name="Констурктор" isActive={true}>
-        <BurgerIcon type="primary" />
+      <NavLink name="Констурктор" isActive={true} path="/" onClick={""}>
+        <BurgerIcon type={constructorActive} />
       </NavLink>
-      <NavLink name="Лента заказов" isActive={false}>
-        <ListIcon type="secondary" />
+      <NavLink name="Лента заказов" isActive={false} path="/feed">
+        <ListIcon type={feedActive} />
       </NavLink>
     </ul>
   );
 };
 
 function AppHeader() {
+  const [profileActive, setProfileActive] = useState("secondary");
+
   const navigate = useNavigate();
 
-  const onCabinetClick = () => {
-    navigate("/profile");
-  };
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/profile") {
+      setProfileActive("primary");
+    } else {
+      setProfileActive("secondary");
+    }
+  }, [location.pathname]);
 
   return (
     <header className={`${styles.header}`}>
       <nav className={`${styles.header__container}`}>
         <NavLinks />
-        <Logo />
-        <NavLink
-          name="Личный кабинет"
-          isActive={false}
-          onClick={onCabinetClick}
-        >
-          <ProfileIcon type="secondary" />
+        <NavLink path={"/"} isActive={false} name="">
+          <Logo />
+        </NavLink>
+        <NavLink name="Личный кабинет" isActive={false} path="/profile">
+          <ProfileIcon type={profileActive} />
         </NavLink>
       </nav>
     </header>

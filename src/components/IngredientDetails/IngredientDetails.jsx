@@ -1,44 +1,27 @@
-import { useLocation, useParams, useResolvedPath } from "react-router-dom";
-import Modal from "../Modal/Modal";
+import { useParams } from "react-router-dom";
 import styles from "./IngredientDetails.module.css";
 // import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import AppHeader from "../AppHeader/AppHeader";
-import { useEffect, useState } from "react";
-import { ingredientsApi } from "../../utils/api";
-import { getIngredients } from "../../services/actions/actions";
+import { useSelector } from "react-redux";
 
 const IngredientDetails = () => {
   let data = {};
   const { ingredientId } = useParams();
-  const match = useResolvedPath("");
-  const dispatch = useDispatch();
-
-  console.log("data4", data);
-
-  useEffect(() => {
-    console.log("ты меня вообще слышишь?");
-    dispatch(getIngredients());
-  }, []);
 
   const ingredients = useSelector((store) => store.loadedIngredients);
   ingredients.buns.forEach((item) => {
     if (ingredientId === item._id) {
-      console.log("bun", item);
       data = item;
     }
   });
 
   ingredients.main.forEach((item) => {
     if (ingredientId === item._id) {
-      console.log("bun", item);
       data = item;
     }
   });
 
   ingredients.sauces.forEach((item) => {
     if (ingredientId === item._id) {
-      console.log("bun", item);
       data = item;
     }
   });

@@ -77,8 +77,6 @@ const BurgerIngredient = ({ element, onOpen, addToOrder }) => {
     // addClick(type, _id);
   };
 
-  console.log("location", location);
-
   return (
     !isDrag && (
       <li className={`${styles.ingredient} pt-6`} ref={ingredientRef}>
@@ -161,7 +159,7 @@ function BurgerIngredients({ onOpen, addToOrder }) {
   const bunRef = useRef(null);
   const mainRef = useRef(null);
   const sauceRef = useRef(null);
-  const ingredientsRef = useRef(null);
+  const ingredientsRef = useRef("");
   const [currentType, setCurrentType] = useState("bun");
 
   const ingredients = useSelector((store) => store.loadedIngredients);
@@ -198,7 +196,9 @@ function BurgerIngredients({ onOpen, addToOrder }) {
     ingredientsRef.current.addEventListener("scroll", handleScroll);
 
     return () => {
-      ingredientsRef.current.removeEventListener("scroll", handleScroll);
+      if (ingredientsRef.current) {
+        ingredientsRef.current.removeEventListener("scroll", handleScroll);
+      }
     };
   }, [currentType]);
 
