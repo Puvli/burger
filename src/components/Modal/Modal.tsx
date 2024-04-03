@@ -3,7 +3,6 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./Modal.module.css";
 import ReactDOM from "react-dom";
 import React, { FC, ReactNode } from "react";
-import PropTypes from "prop-types";
 import { ModalProps } from "../../services/types";
 
 const Modal: FC<ModalProps> = ({ title, children, onClose }) => {
@@ -40,12 +39,6 @@ const Modal: FC<ModalProps> = ({ title, children, onClose }) => {
     </>,
     document.getElementById("modal") as HTMLElement
   );
-};
-
-//проверка типов
-Modal.propTypes = {
-  title: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Modal;

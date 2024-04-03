@@ -1,13 +1,11 @@
-import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
 import { FC, ReactNode } from "react";
 import { ICustomerState, IProtected, ProtectedProps } from "../../services/types";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const Protected: FC<ProtectedProps> = ({ onlyUnAuth = false, component }) => {
-  const customer = useSelector<IProtected>(
-    (store) => store.customer
-  ) as ICustomerState;
+
+  const customer = useAppSelector(store => store.customer);
   const location = useLocation();
 
   // if (!customer.isAuthChecked) {
@@ -26,11 +24,6 @@ const Protected: FC<ProtectedProps> = ({ onlyUnAuth = false, component }) => {
 
   return <>{component}</>;
 };
-
-// Protected.propTypes = {
-//   component: PropTypes.func.isRequired,
-//   onlyUnAuth: PropTypes.bool.isRequired,
-// };
 
 export const OnlyAuth: React.FC<{ component: React.ReactNode }> = ({
   component,

@@ -23,6 +23,14 @@ const headersAuthariztion: HeadersInit = {
 //   authorization: localStorage.getItem("refreshToken"),
 // };
 
+// function checkResponse(res: Response): Promise<any> {
+//   if (res.ok) {
+//     return res.json();
+//   } else {
+//     return Promise.reject(res.status);
+//   }
+// }
+
 function checkResponse(res: Response): Promise<any> {
   if (res.ok) {
     return res.json();
@@ -32,7 +40,6 @@ function checkResponse(res: Response): Promise<any> {
 }
 
 const request = (path: string, options: RequestInit) => {
-  // Promise<>
   const url = baseUrl + path;
   return fetch(url, options).then(checkResponse);
 };
@@ -100,7 +107,7 @@ export const loginApi = (value: { email: string; password: string }) => {
   });
 };
 
-export const logOut = (value: { token: string | null }) => {
+export const logOutApi  = (value: { token: string | null }) => {
   return request("auth/logout", {
     headers,
     method: "POST",
@@ -123,7 +130,7 @@ export const fetchGetUser = () => {
   });
 };
 
-export const updateUserInformation = (
+export const updateUserInformationApi = (
   name: string,
   email: string,
   password: string

@@ -15,7 +15,7 @@ import {
 import styles from "./register.module.css";
 import { registerApi } from "../utils/api";
 import { makeRegistration } from "../services/actions/actions";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../services/hooks/hooks";
 
 function Register() {
   // const emailValue = () => {
@@ -24,7 +24,7 @@ function Register() {
   const [emailValue, setEmailValue] = React.useState<string>("bob@example.com");
   // const inputRef = React.useRef(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);

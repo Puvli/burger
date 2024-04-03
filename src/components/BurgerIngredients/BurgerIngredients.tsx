@@ -3,12 +3,19 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerIngredients.module.css";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
 import { CURRENT_INGREDIENT } from "../../services/actions/modal";
 import { useDrag } from "react-dnd";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { BurgerIngredientProps, BurgerIngredientsProps, IBurgerIngredientsStore, IIngredient, IngredientsMenuProps, IngredientsProps, LoadedIngredients } from "../../services/types";
+import {
+  BurgerIngredientProps,
+  BurgerIngredientsProps,
+  IBurgerIngredientsStore,
+  IIngredient,
+  IngredientsMenuProps,
+  IngredientsProps,
+  LoadedIngredients,
+} from "../../services/types";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientsMenu: React.FC<IngredientsMenuProps> = ({
   click,
@@ -35,28 +42,13 @@ const IngredientsMenu: React.FC<IngredientsMenuProps> = ({
   );
 };
 
-//проверка типов
-// IngredientsMenu.propTypes = {
-//   click: PropTypes.func,
-//   currentType: PropTypes.string.isRequired,
-//   refs: PropTypes.object.isRequired,
-// };
-
-
-
-// const IngredientsItems = {
-//   bun: "Булки",
-//   main: "Начинки",
-//   sauce: "Соусы",
-// };
-
 const BurgerIngredient: React.FC<BurgerIngredientProps> = ({
   element,
   onOpen,
   addToOrder,
 }) => {
   const { image, price, name, _id } = element;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const ingredientId = _id;
 
@@ -70,15 +62,11 @@ const BurgerIngredient: React.FC<BurgerIngredientProps> = ({
 
   const handleOnOpen = () => {
     onOpen(element);
-    dispatch({ type: CURRENT_INGREDIENT, current: element });
+    dispatch({ type: CURRENT_INGREDIENT, payload: { current: element } });
   };
 
-  const bunCountStore = useSelector<IBurgerIngredientsStore>(
-    (store) => store.ingredients.clickedIngredient.bun
-  ) as IIngredient;
-  const itemsFromStore = useSelector<IBurgerIngredientsStore>(
-    (store) => store.ingredients.clickedIngredient.items
-  ) as IIngredient[];
+  const bunCountStore = useAppSelector(store => store.ingredients.clickedIngredient.bun);
+  const itemsFromStore = useAppSelector(store => store.ingredients.clickedIngredient.items);
 
   const itemsCount = itemsFromStore.filter(
     (item: { image: string; price: number; name: string; _id: string }) =>
@@ -130,13 +118,6 @@ const BurgerIngredient: React.FC<BurgerIngredientProps> = ({
   );
 };
 
-//проверка типов
-// BurgerIngredient.propTypes = {
-//   element: PropTypes.object.isRequired,
-//   addToOrder: PropTypes.func.isRequired,
-//   onOpen: PropTypes.func.isRequired,
-// };
-
 const Ingredients = forwardRef<HTMLDivElement, IngredientsProps>(
   (props, ref) => {
     return (
@@ -158,8 +139,6 @@ const Ingredients = forwardRef<HTMLDivElement, IngredientsProps>(
   }
 );
 
-
-
 const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   onOpen,
   addToOrder,
@@ -170,11 +149,7 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
   const ingredientsRef = useRef<HTMLDivElement>(null);
   const [currentType, setCurrentType] = useState<string>("bun");
 
-  const ingredients = useSelector<
-    { loadedIngredients: LoadedIngredients },
-    LoadedIngredients
-  >((store) => store.loadedIngredients);
-
+  const ingredients = useAppSelector(store => store.loadedIngredients);
   const clickType = (type: string) => {
     setCurrentType(type);
   };
@@ -247,12 +222,6 @@ const BurgerIngredients: FC<BurgerIngredientsProps> = ({
       </div>
     </section>
   );
-};
-
-//проверка типов
-BurgerIngredients.propTypes = {
-  onOpen: PropTypes.func.isRequired,
-  addToOrder: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

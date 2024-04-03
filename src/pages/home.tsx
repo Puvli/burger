@@ -5,7 +5,6 @@ import React from "react";
 import IngredientDetails from "../components/IngredientDetails/IngredientDetails";
 import OrderDetails from "../components/OrderDetails/OrderDetails";
 import Modal from "../components/Modal/Modal";
-import { useDispatch, useSelector } from "react-redux";
 import { getIngredients } from "../services/actions/actions";
 import { REMOVE_CURRENT_INGREDIENT } from "../services/actions/modal";
 import { OPEN_MODAL_ORDER } from "../services/actions/modal";
@@ -15,9 +14,10 @@ import { addIngredient } from "../services/actions/addIngredient";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { getProfileData } from "../utils/api";
 import { IIngredient, IModalInHome } from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 
 function HomePage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const clickBun = (bun: IIngredient) => {
@@ -49,6 +49,7 @@ function HomePage() {
     setOpenModalOrder(isOpenModalOrder ? false : true);
     dispatch({
       type: OPEN_MODAL_ORDER,
+      payload: ""
     });
   };
 
@@ -58,11 +59,11 @@ function HomePage() {
   const ingredientOpener = (info: IIngredient) => {
     setIngredientInfo(info);
     setOpenIngredient(ingredientOpen ? false : true);
-    dispatch({ type: REMOVE_CURRENT_INGREDIENT });
+    dispatch({ type: REMOVE_CURRENT_INGREDIENT, payload: "" });
     // navigate(-1);
   };
 
-  const modalOrderOpen = useSelector<IModalInHome>((store) => store.modal.isOpen) as boolean;
+  const modalOrderOpen = useAppSelector(store => store.modal.isOpen);
 
   const onDropHandler = (item: IIngredient) => {
     dispatch(addIngredient(item));

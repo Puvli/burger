@@ -2,34 +2,19 @@ import {
   EmailInput,
   PasswordInput,
   Input,
-  Tab,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import AppHeader from "../components/AppHeader/AppHeader";
 import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   useNavigate,
   NavLink,
   useLocation,
 } from "react-router-dom";
 import styles from "./profile.module.css";
-import {
-  fetchGetUser,
-  logOut,
-  refreshToken,
-  updToken,
-  updateUserInformation,
-} from "../utils/api";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  LOGOUT_SUCCESS,
-  SET_IS_AUTH_CHECKED,
-  UPDATE_SUCCESS,
-} from "../services/actions/actions";
-import { ICustomerState, IProfile } from "../services/types";
+import { logOut, updateUserInformation } from "../services/actions/actions";
+import { ICustomerState } from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 
 function Profile() {
   const location = useLocation();
@@ -41,11 +26,9 @@ function Profile() {
 
   const [emailValue, setEmailValue] = React.useState<string>("");
 
-  const customer = useSelector<IProfile>(
-    (store) => store.customer
-  ) as ICustomerState;
+  const customer = useAppSelector((store) => store.customer) as ICustomerState;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
@@ -89,16 +72,8 @@ function Profile() {
           <p
             className={`text text_type_main-medium text_color_inactive ${styles.tabParagraph}`}
             onClick={() => {
-              logOut({ token: localStorage.getItem("refreshToken") }).then(
-                (res) => {
-                  if (res.success) {
-                    localStorage.removeItem("refreshToken");
-                    localStorage.removeItem("accessToken");
-                    dispatch({ type: LOGOUT_SUCCESS });
-                    navigate("/login");
-                  }
-                }
-              );
+              dispatch(logOut({ token: localStorage.getItem("refreshToken") }));
+              navigate("/login");
             }}
           >
             Выход
@@ -113,12 +88,13 @@ function Profile() {
           className={styles.subcontainer}
           onSubmit={() => {
             console.log(value, emailValue);
-            updateUserInformation(value, emailValue, passwordValue)
-              .then((data) => {
-                console.log("data", data);
-                dispatch({ type: UPDATE_SUCCESS, payload: data.user });
-              })
-              .catch((err) => console.log("err", err));
+            // updateUserInformation(value, emailValue, passwordValue)
+            //   .then((data) => {
+            //     console.log("data", data);
+            //     dispatch({ type: UPDATE_SUCCESS, payload: data.user });
+            //   })
+            //   .catch((err) => console.log("err", err));
+            dispatch(updateUserInformation(value, emailValue, passwordValue));
           }}
         >
           <Input

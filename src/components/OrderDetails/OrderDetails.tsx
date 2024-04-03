@@ -1,11 +1,8 @@
-import { useSelector } from "react-redux";
 import styles from "./OrderDetails.module.css";
-import { INewOrderState, IOrderDetails } from "../../services/types";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const OrderDetails = () => {
-  const numberOfOrder = useSelector<IOrderDetails>(
-    (store) => store.number.number
-  ) as INewOrderState;
+  const numberOfOrder = useAppSelector((store) => store.number.number);
 
   return (
     <div className={`${styles.container} pt-20 pb-30`}>

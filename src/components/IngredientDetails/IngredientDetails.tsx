@@ -1,15 +1,14 @@
 import { useParams } from "react-router-dom";
 import styles from "./IngredientDetails.module.css";
-// import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { FC } from "react";
 import { IIngredient, State } from "../../services/types";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientDetails: FC = () => {
   // let data: Ingredient;
   const { ingredientId } = useParams<{ ingredientId: string }>();
 
-  const ingredients = useSelector((store: State) => store.loadedIngredients);
+  const ingredients = useAppSelector((store) => store.loadedIngredients);
   // ingredients.buns.forEach((item) => {
   //   if (ingredientId === item._id) {
   //     data = item;
@@ -82,10 +81,5 @@ const IngredientDetails: FC = () => {
     </div>
   );
 };
-
-//проверка типов
-// IngredientDetails.propTypes = {
-//   data: PropTypes.object.isRequired,
-// };
 
 export default IngredientDetails;

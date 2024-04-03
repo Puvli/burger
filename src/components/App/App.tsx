@@ -2,11 +2,11 @@ import AppHeader from "../AppHeader/AppHeader";
 import { useEffect } from "react";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import Modal from "../Modal/Modal";
-import { useDispatch } from "react-redux";
 import {
   AUTH_SUCCESS,
   SET_IS_AUTH_CHECKED,
   getIngredients,
+  getUser,
 } from "../../services/actions/actions";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import HomePage from "../../pages/home";
@@ -23,11 +23,12 @@ import Feed from "../../pages/feed";
 import FeedOrder from "../../pages/feed-order";
 import HistortOfOrders from "../../pages/history-of-orders";
 import OrderInHistory from "../../pages/order-in-history";
+import { useAppDispatch } from "../../services/hooks/hooks";
 
 export default function App() {
   let location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const background = location.state && location.state.background;
 
   const handleModalClose = () => {
@@ -39,31 +40,7 @@ export default function App() {
     dispatch(getIngredients());
 
     if (localStorage.getItem("accessToken")) {
-      fetchGetUser()
-        .then((data) => {
-          if (data.success) {
-            dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
-            dispatch({ type: AUTH_SUCCESS, payload: data.user });
-          }
-        })
-        .catch((err) => {
-          console.log("error ", err);
-          updToken({
-            token: localStorage.getItem("refreshToken"),
-          })
-            .then((data) => {
-              localStorage.setItem("accessToken", data.accessToken);
-              localStorage.setItem("refreshToken", data.refreshToken);
-            })
-            .catch((err) => console.log("update err", err));
-          fetchGetUser().then((data) => {
-            console.log("new data", data);
-            if (data.success) {
-              dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
-              dispatch({ type: AUTH_SUCCESS, payload: data.user });
-            }
-          });
-        });
+      dispatch(getUser());
     }
   }, []);
 

@@ -1,15 +1,13 @@
 import { useParams } from "react-router-dom";
 import styles from "./IngredientPage.module.css";
-// import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
 import { FC } from "react";
 import { IIngredient, State } from "../../services/types";
+import { useAppSelector } from "../../services/hooks/hooks";
 
 const IngredientPage: FC = () => {
-  
   const { ingredientId } = useParams<{ ingredientId: string }>();
 
-  const ingredients = useSelector((store: State) => store.loadedIngredients);
+  const ingredients = useAppSelector((store) => store.loadedIngredients);
   let data: IIngredient | undefined;
   ["buns", "main", "sauces"].forEach((category) => {
     const found = ingredients[category as keyof typeof ingredients].find(
@@ -64,10 +62,5 @@ const IngredientPage: FC = () => {
     </div>
   );
 };
-
-//проверка типов
-// IngredientDetails.propTypes = {
-//   data: PropTypes.object.isRequired,
-// };
 
 export default IngredientPage;

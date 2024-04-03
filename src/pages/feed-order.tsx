@@ -1,21 +1,27 @@
-import { useDispatch, useSelector } from "react-redux";
+
 import styles from "./feed-order.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams, useResolvedPath } from "react-router-dom";
 import { FC, useEffect } from "react";
 import { connect, disconnect } from "../services/socket/actions";
 import { ICountIngredients } from "./order-in-history";
-import { IFeedPopup, IIngredient, IResult, ISocket, LoadedIngredients, doneOrders } from "../services/types";
+import {
+  IFeedPopup,
+  IIngredient,
+  IResult,
+  ISocket,
+  LoadedIngredients,
+  doneOrders,
+} from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 const url = "wss://norma.nomoreparties.space/orders/all";
 
 const FeedOrder: FC<IFeedPopup> = ({ popup }) => {
   const isPopup = popup ? styles.container_popup : "";
   const isCenter = popup ? styles.paragraph_center : "";
   const { orderNumber } = useParams();
-  const dispatch = useDispatch();
-  const ingredientsAll = useSelector<{ loadedIngredients: LoadedIngredients }>(
-    (store) => store.loadedIngredients
-  ) as LoadedIngredients;
+  const dispatch = useAppDispatch();
+  const ingredientsAll = useAppSelector((store) => store.loadedIngredients);
   const { all } = ingredientsAll;
   useEffect(() => {
     dispatch(connect(url));
@@ -47,9 +53,7 @@ const FeedOrder: FC<IFeedPopup> = ({ popup }) => {
     return resultMas;
   };
 
-  const zakazi = useSelector<ISocket>(
-    (store) => store.socket.done
-  ) as doneOrders;
+  const zakazi = useAppSelector((store) => store.socket.done) as doneOrders;
   const { orders, success } = zakazi;
 
   const sumPrices = (arr: ICountIngredients[]): number => {

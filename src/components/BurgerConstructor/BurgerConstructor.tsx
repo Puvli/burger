@@ -5,8 +5,6 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerConstructor.module.css";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
 import {
   DELETE_INGREDIENTS,
   makeNewOrder,
@@ -17,14 +15,25 @@ import { useDrop, useDrag } from "react-dnd";
 import { FC, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 // import { AppReducerState, IClickedIngredient } from "../../services/reducers/reducers";
-import { AppReducerState, IBurgerComponentProps, IBurgerConstructor, IBurgerIngredientsStore, IClickedIngredient, ICustomer, ICustomerState, IIngredient, TInfo } from "../../services/types";
+import {
+  AppReducerState,
+  IBurgerComponentProps,
+  IBurgerConstructor,
+  IBurgerIngredientsStore,
+  IClickedIngredient,
+  ICustomer,
+  ICustomerState,
+  IIngredient,
+  TInfo,
+} from "../../services/types";
+import { useAppDispatch, useAppSelector } from "../../services/hooks/hooks";
 
 const BurgerComponent: React.FC<IBurgerComponentProps> = ({ item, index }) => {
   const style = {
     cursor: "move",
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -65,8 +74,10 @@ const BurgerComponent: React.FC<IBurgerComponentProps> = ({ item, index }) => {
 
       dispatch({
         type: DRAG_IN_CONSTRUCTOR,
-        index: hoverIndex,
-        drag: dragIndex,
+        payload: {
+          index: hoverIndex,
+          drag: dragIndex,
+        },
       });
 
       item.index = hoverIndex;
@@ -86,7 +97,12 @@ const BurgerComponent: React.FC<IBurgerComponentProps> = ({ item, index }) => {
   drag(drop(ref));
 
   const deleteElement = () => {
-    dispatch({ type: DELETE_INGREDIENTS, index: index });
+    dispatch({
+      type: DELETE_INGREDIENTS,
+      payload: {
+        index: index,
+      },
+    });
   };
 
   return (
@@ -108,16 +124,11 @@ const BurgerComponent: React.FC<IBurgerComponentProps> = ({ item, index }) => {
   );
 };
 
-// interface IClickedIngredient {
-//     items: IIngredient[];
-//     bun: IIngredient;
-// }
-
 const BurgerComponents = () => {
-  const clickedIngredient = useSelector<IBurgerIngredientsStore>(
-    (store) => store.ingredients.clickedIngredient
-  ) as IClickedIngredient;
-
+  const clickedIngredient = useAppSelector(
+    (state) => state.ingredients.clickedIngredient
+  );
+  console.log(clickedIngredient);
   return (
     <>
       {clickedIngredient.bun && (
@@ -153,10 +164,10 @@ const BurgerComponents = () => {
 };
 
 const Info: FC<TInfo> = () => {
-  const dispatch = useDispatch();
-  const orderList = useSelector<IBurgerIngredientsStore>(
+  const dispatch = useAppDispatch();
+  const orderList = useAppSelector(
     (store) => store.ingredients.clickedIngredient
-  ) as IClickedIngredient;
+  );
   let isDisabled = orderList.bun && orderList.items.length > 0;
   const orderClick = () => {
     if (isDisabled) {
@@ -167,6 +178,7 @@ const Info: FC<TInfo> = () => {
       // }
       dispatch({
         type: OPEN_MODAL_ORDER,
+        payload: "",
       });
     }
   };
@@ -178,9 +190,7 @@ const Info: FC<TInfo> = () => {
       )
     : 0;
 
-  const customer = useSelector<ICustomer>(
-    (store) => store.customer
-  ) as ICustomerState;
+  const customer = useAppSelector((store) => store.customer);
   const navigate = useNavigate();
 
   return (
@@ -230,11 +240,5 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
     </section>
   );
 };
-
-//проверка типов
-// BurgerConstructor.propTypes = {
-//   onClick: PropTypes.func,
-//   onDropHandler: PropTypes.func,
-// };
 
 export default BurgerConstructor;

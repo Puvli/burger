@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
 import styles from "./order-in-history.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams, useResolvedPath } from "react-router-dom";
@@ -9,7 +8,16 @@ import {
   getDataOfOrder,
   getIngredients,
 } from "../services/actions/actions";
-import { IElem, IIngredient, IResult, ISocket, LoadedIngredients, OrderState, doneOrders } from "../services/types";
+import {
+  IElem,
+  IIngredient,
+  IResult,
+  ISocket,
+  LoadedIngredients,
+  OrderState,
+  doneOrders,
+} from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 const url = "wss://norma.nomoreparties.space/orders/all";
 
 interface IPopup {
@@ -25,19 +33,19 @@ const OrderInHistory: FC<{ popup: boolean }> = ({ popup }) => {
   const isPopup = popup ? styles.container_popup : "";
   const isCenter = popup ? styles.paragraph_center : "";
   const { orderHistoryNumber } = useParams();
-  const dispatch = useDispatch();
-  const ingredientsAll = useSelector<
-    { loadedIngredients: LoadedIngredients },
-    LoadedIngredients
-  >((store) => store.loadedIngredients);
-  const orderPopupDataSuccess = useSelector<IPopup>(
+  const dispatch = useAppDispatch();
+
+  const ingredientsAll = useAppSelector((store) => store.loadedIngredients);
+
+  const orderPopupDataSuccess = useAppSelector(
     (store) => store.orderPopupData.orderData.success
   );
-  const orderPopupDataElem = useSelector<IPopup>(
+
+  const orderPopupDataElem = useAppSelector(
     (store) => store.orderPopupData.elem
   ) as IElem;
 
-  const popupStore = useSelector<IPopup>(
+  const popupStore = useAppSelector(
     (store) => store.orderPopupData
   ) as OrderState;
   const { popupSuccess, elem } = popupStore;
@@ -66,9 +74,7 @@ const OrderInHistory: FC<{ popup: boolean }> = ({ popup }) => {
     return resultMas;
   };
 
-  const zakazi = useSelector<ISocket>(
-    (store) => store.socket.done
-  ) as doneOrders;
+  const zakazi = useAppSelector((store) => store.socket.done) as doneOrders;
   const { orders, success } = zakazi;
 
   useEffect(() => {

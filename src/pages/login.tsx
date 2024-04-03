@@ -13,12 +13,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./login.module.css";
-import { loginApi } from "../utils/api";
-import { useDispatch } from "react-redux";
 import { logIn } from "../services/actions/actions";
+import { useAppDispatch } from "../services/hooks/hooks";
 
 function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [value, setValue] = React.useState<string>("bob@example.com");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

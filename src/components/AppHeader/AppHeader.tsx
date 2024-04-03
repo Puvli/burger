@@ -5,7 +5,6 @@ import {
   ListIcon,
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from "prop-types";
 import { FC, FunctionComponent, useEffect, useState } from "react";
 import {
   useLocation,
@@ -96,14 +95,5 @@ const AppHeader: FC<{onClick?: () => void}> = () => {
     </header>
   );
 }
-
-// export default AppHeader;
-
-// проверка типов
-// NavLink.propTypes = {
-//   isActive: PropTypes.bool.isRequired,
-//   name: PropTypes.string.isRequired,
-//   children: PropTypes.node.isRequired,
-// };
 
 export default AppHeader;

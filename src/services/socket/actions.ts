@@ -29,4 +29,5 @@ export const connectWithToken = (url: string): IConnect => {
 
 export const disconnect = (): IDisconnect => ({
   type: WS_CONNECTION_CLOSED,
+  payload: "",
 });

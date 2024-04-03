@@ -3,22 +3,21 @@ import BurgerConstructor from "../components/BurgerConstructor/BurgerConstructor
 import CardOrder from "../components/CardOrder/CardOrder";
 import Stats from "../components/Stats/Stats";
 import styles from "./feed.module.css";
-import { useDispatch, useSelector } from "react-redux";
 import { connect, disconnect } from "../services/socket/actions";
 import { getIngredients } from "../services/actions/actions";
 import { Link, useLocation } from "react-router-dom";
 import { IResult, ISocket, IUserOrders, LoadedIngredients, doneOrders } from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 // import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 const url = "wss://norma.nomoreparties.space/orders/all";
 
 export default function Feed() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const ingredientsAll = useSelector<{loadedIngredients: LoadedIngredients}>((store) => store.loadedIngredients) as LoadedIngredients;
+   const ingredientsAll = useAppSelector(store => store.loadedIngredients) as LoadedIngredients;
   const { all } = ingredientsAll;
-  const zakazi = useSelector<ISocket>((store) => store.socket.done) as doneOrders;
+  const zakazi = useAppSelector(store => store.socket.done) as doneOrders;
   const { total, totalToday, orders, success } = zakazi;
-  // const anotherOrders = useSelector<ISocket>((store) => store.socket.done?.orders);
 
   const findAndCount = (array: string[], elem: string) => {
     return array.filter((e) => e === elem).length;

@@ -33,7 +33,9 @@ interface AddIngredientsSuccessAction {
 
 interface DeleteIngredientsAction {
   type: typeof DELETE_INGREDIENTS;
-  index: number;
+  payload: {
+    index: number;
+  };
 }
 
 interface SetIsAuthCheckedAction {
@@ -49,8 +51,10 @@ interface DragIngredientToConstructorAction {
 
 interface DragInConstructorAction {
   type: typeof DRAG_IN_CONSTRUCTOR;
-  index: number;
-  drag: number;
+  payload: {
+    index: number;
+    drag: number;
+  };
 }
 
 export type AppActions =
@@ -112,20 +116,15 @@ export interface IngredientsMenuProps {
 }
 
 export interface BurgerIngredientProps {
-  element: {
-    image: string;
-    price: number;
-    name: string;
-    _id: string;
-  };
-  onOpen: (element: any) => void; // Уточните тип, если возможно
-  addToOrder: (element: any) => void; // Уточните тип, если возможно
+  element: IIngredient;
+  onOpen: (element: IIngredient) => void;
+  addToOrder: (element: IIngredient) => void;
 }
 
 export interface IngredientsProps {
   title: string;
-  onOpen: (element: any) => void;
-  addToOrder: (element: any) => void;
+  onOpen: (element: IIngredient) => void;
+  addToOrder: (element: IIngredient) => void;
   ingredients: IIngredient[];
 }
 
@@ -332,7 +331,9 @@ export interface OpenModalOrderAction {
 
 export interface CurrentIngredientAction {
   type: typeof CURRENT_INGREDIENT;
-  current: IIngredient;
+  payload: {
+    current: IIngredient;
+  };
 }
 
 export interface RemoveCurrentIngredientAction {
@@ -368,46 +369,47 @@ export interface IConnect {
 
 export interface IDisconnect {
   type: typeof WS_CONNECTION_CLOSED;
+  payload: string;
 }
 
 export interface IUserOrders {
-    createdAt: string;
-    name: string;
-    number: number;
-    ingredients: string[];
-    status: "done" | "pending";
-  }
-  
-  export interface doneOrders {
-    success: boolean;
-    orders: IUserOrders[];
-    total: number;
-    totalToday: number;
-    message: string;
-  }
+  createdAt: string;
+  name: string;
+  number: number;
+  ingredients: string[];
+  status: "done" | "pending";
+}
 
-  //reducers/orderData
-  export interface IElem {
-    // ingredients: ICountIngredients[];
-    ingredients: string[];
-    name: string;
-    createdAt: string;
-    status: string;
-  }
-  
-  export interface OrderState {
-    orderData: {
-      orders: IIngredient[];
-      success: boolean;
-    };
-    elem: IElem;
-    popupSuccess?: boolean;
-  }
-  
-  export interface PoupOrderAction {
-    type: typeof POPUP_ORDER;
-    payload: {
-      orders: IIngredient[];
-      success: boolean;
-    };
-  }
+export interface doneOrders {
+  success: boolean;
+  orders: IUserOrders[];
+  total: number;
+  totalToday: number;
+  message: string;
+}
+
+//reducers/orderData
+export interface IElem {
+  // ingredients: ICountIngredients[];
+  ingredients: string[];
+  name: string;
+  createdAt: string;
+  status: string;
+}
+
+export interface OrderState {
+  orderData: {
+    orders: IIngredient[];
+    success: boolean;
+  };
+  elem: IElem;
+  popupSuccess?: boolean;
+}
+
+export interface PoupOrderAction {
+  type: typeof POPUP_ORDER;
+  payload: {
+    orders: IIngredient[];
+    success: boolean;
+  };
+}

@@ -21,7 +21,7 @@ export const modalReducer = (
     case CURRENT_INGREDIENT:
       return {
         ...state,
-        current: action.current,
+        current: action.payload.current,
       };
     case REMOVE_CURRENT_INGREDIENT:
       return {

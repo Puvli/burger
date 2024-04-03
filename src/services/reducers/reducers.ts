@@ -99,8 +99,8 @@ const reducer = (state: AppReducerState = initialState, action: AppActions) => {
         clickedIngredient: {
           ...state.clickedIngredient,
           items: [
-            ...state.clickedIngredient.items.slice(0, action.index),
-            ...state.clickedIngredient.items.slice(action.index + 1),
+            ...state.clickedIngredient.items.slice(0, action.payload.index),
+            ...state.clickedIngredient.items.slice(action.payload.index + 1),
           ],
         },
       };
@@ -128,10 +128,13 @@ const reducer = (state: AppReducerState = initialState, action: AppActions) => {
       const updatedIngredients = [...state.clickedIngredient.items];
 
       // Удалили элемент из его текущей позиции
-      const [movedIngredient] = updatedIngredients.splice(action.index, 1);
+      const [movedIngredient] = updatedIngredients.splice(
+        action.payload.index,
+        1
+      );
 
       // ставим элемент в новую позицию
-      updatedIngredients.splice(action.drag, 0, movedIngredient);
+      updatedIngredients.splice(action.payload.drag, 0, movedIngredient);
       return {
         ...state,
         clickedIngredient: {

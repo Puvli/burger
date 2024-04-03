@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import styles from "./CardHistoryOrder.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import moment from "moment";
 import { CardHistoryOrderProps, ImageProp } from "../../services/types";

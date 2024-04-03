@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import styles from "./Stats.module.css";
 import { FC, useEffect } from "react";
 import { StatsProps } from "../../services/types";

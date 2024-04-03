@@ -16,75 +16,33 @@ import {
   useLocation,
 } from "react-router-dom";
 import styles from "./history-of-orders.module.css";
-import {
-  fetchGetUser,
-  // getProfileData,
-  logOut,
-  refreshToken,
-  updToken,
-  updateUserInformation,
-} from "../utils/api";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  LOGOUT_SUCCESS,
-  SET_IS_AUTH_CHECKED,
-  UPDATE_SUCCESS,
-  getIngredients,
-} from "../services/actions/actions";
-import CardOrder from "../components/CardOrder/CardOrder";
-import {
-  connect,
-  connectWithToken,
-  disconnect,
-} from "../services/socket/actions";
+import { logOut } from "../services/actions/actions";
+import { connectWithToken, disconnect } from "../services/socket/actions";
 import CardHistoryOrder from "../components/CardHistoryOrder/CardHistoryOrder";
-import { IResult, ISocket, LoadedIngredients, doneOrders } from "../services/types";
+import {
+  IResult,
+  ISocket,
+  LoadedIngredients,
+  doneOrders,
+} from "../services/types";
+import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
 const url = "wss://norma.nomoreparties.space/orders/all";
 const userUrl = "wss://norma.nomoreparties.space/orders";
 
 function HistroyOfOrders() {
-  // const customer = useSelector((store) => store.customer);
-  // const error = useSelector<ISocket>((store) => store.socket.done?.message);
-
-  // if (error === "Invalid or missing token") {
-  //   console.log("zdes");
-  //   updToken({
-  //     token: localStorage.getItem("refreshToken"),
-  //   })
-  //     .then((data) => {
-  //       localStorage.setItem("accessToken", data.accessToken);
-  //       localStorage.setItem("refreshToken", data.refreshToken);
-  //     })
-  //     .catch((err) => console.log("update err", err));
-  // }
-
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  // const accessToken = localStorage.getItem("accessToken");
-  // const token = accessToken.replace("Bearer ", "");
-  // const userUrl = `${url}?token=${token}`;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // dispatch(connect(url));
     dispatch(connectWithToken(userUrl));
-    // dispatch(getIngredients());
     return () => {
       dispatch(disconnect());
     };
   }, []);
 
-  const ingredientsAll = useSelector<
-    { loadedIngredients: LoadedIngredients },
-    LoadedIngredients
-  >((store) => store.loadedIngredients);
+  const ingredientsAll = useAppSelector((store) => store.loadedIngredients);
   const { all } = ingredientsAll;
-  const zakazi = useSelector<ISocket>(
-    (store) => store.socket.done
-  ) as doneOrders;
+  const zakazi = useAppSelector((store) => store.socket.done) as doneOrders;
   const { orders, success } = zakazi;
-  //   const anotherOrders = useSelector((store) => store.socket.done.orders);
 
   const findAndCount = (array: string[], elem: string) => {
     return array.filter((e) => e === elem).length;
@@ -132,16 +90,7 @@ function HistroyOfOrders() {
           <p
             className={`text text_type_main-medium text_color_inactive ${styles.tabParagraph}`}
             onClick={() => {
-              logOut({ token: localStorage.getItem("refreshToken") }).then(
-                (res) => {
-                  if (res.success) {
-                    localStorage.removeItem("refreshToken");
-                    localStorage.removeItem("accessToken");
-                    dispatch({ type: LOGOUT_SUCCESS });
-                    navigate("/login");
-                  }
-                }
-              );
+              dispatch(logOut({ token: localStorage.getItem("refreshToken") }));
             }}
           >
             Выход

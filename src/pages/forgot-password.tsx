@@ -13,7 +13,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styles from "./forgot-password.module.css";
-import { useDispatch } from "react-redux";
 import { recoverApi } from "../utils/api";
 
 function ForgotPassword() {
