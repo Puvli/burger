@@ -37,7 +37,7 @@ function HistroyOfOrders() {
     return () => {
       dispatch(disconnect());
     };
-  }, []);
+  }, [dispatch]);
 
   const ingredientsAll = useAppSelector((store) => store.loadedIngredients);
   const { all } = ingredientsAll;

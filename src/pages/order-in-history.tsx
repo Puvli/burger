@@ -2,7 +2,11 @@ import styles from "./order-in-history.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams, useResolvedPath } from "react-router-dom";
 import { FC, useEffect } from "react";
-import { connect, disconnect } from "../services/socket/actions";
+import {
+  connect,
+  connectWithToken,
+  disconnect,
+} from "../services/socket/actions";
 import {
   POPUP_ORDER,
   getDataOfOrder,
@@ -18,8 +22,8 @@ import {
   doneOrders,
 } from "../services/types";
 import { useAppDispatch, useAppSelector } from "../services/hooks/hooks";
-const url = "wss://norma.nomoreparties.space/orders/all";
 
+const userUrl = "wss://norma.nomoreparties.space/orders";
 interface IPopup {
   orderPopupData: OrderState;
 }
@@ -34,6 +38,16 @@ const OrderInHistory: FC<{ popup: boolean }> = ({ popup }) => {
   const isCenter = popup ? styles.paragraph_center : "";
   const { orderHistoryNumber } = useParams();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(connectWithToken(userUrl));
+    if (orderHistoryNumber) {
+      dispatch(getDataOfOrder(orderHistoryNumber));
+    }
+    return () => {
+      dispatch(disconnect());
+    };
+  }, []);
 
   const ingredientsAll = useAppSelector((store) => store.loadedIngredients);
 
@@ -76,16 +90,6 @@ const OrderInHistory: FC<{ popup: boolean }> = ({ popup }) => {
 
   const zakazi = useAppSelector((store) => store.socket.done) as doneOrders;
   const { orders, success } = zakazi;
-
-  useEffect(() => {
-    dispatch(connect(url));
-    if (orderHistoryNumber) {
-      dispatch(getDataOfOrder(orderHistoryNumber));
-    }
-    return () => {
-      dispatch(disconnect());
-    };
-  }, []);
 
   const sumPrices = (arr: ICountIngredients[]): number => {
     return arr.reduce(

@@ -19,6 +19,14 @@ export default function Feed() {
   const zakazi = useAppSelector(store => store.socket.done) as doneOrders;
   const { total, totalToday, orders, success } = zakazi;
 
+  useEffect(() => {
+    dispatch(connect(url));
+    // dispatch(getIngredients());
+    return () => {
+      dispatch(disconnect());
+    };
+  }, [dispatch]);
+
   const findAndCount = (array: string[], elem: string) => {
     return array.filter((e) => e === elem).length;
   };
@@ -41,14 +49,6 @@ export default function Feed() {
     }
     return resultMas;
   };
-
-  useEffect(() => {
-    dispatch(connect(url));
-    // dispatch(getIngredients());
-    return () => {
-      dispatch(disconnect());
-    };
-  }, []);
 
   return (
     <section className={`${styles.container}`}>

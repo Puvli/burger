@@ -118,7 +118,7 @@ const BurgerComponent: React.FC<IBurgerComponentProps> = ({ item, index }) => {
         thumbnail={`${item.image}`}
         handleClose={deleteElement}
       />
-      ;
+
       <DragIcon type="primary" />
     </div>
   );
@@ -236,7 +236,7 @@ const BurgerConstructor: FC<IBurgerConstructor> = ({
         <BurgerComponents />
       </div>
 
-      <Info onClick={onClick} price={0} />
+      <Info price={0} />
     </section>
   );
 };

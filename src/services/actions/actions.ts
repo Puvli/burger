@@ -51,15 +51,15 @@ export const logIn =
 
 export const logOut =
   (value: { token: string | null }) => (dispatch: AppDispatch) => {
-    return logOutApi({ token: localStorage.getItem("refreshToken") }).then(
-      (res) => {
+    return logOutApi({ token: localStorage.getItem("refreshToken") })
+      .then((res) => {
         if (res.success) {
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("accessToken");
           dispatch({ type: LOGOUT_SUCCESS, payload: "" });
         }
-      }
-    );
+      })
+      .catch((e) => console.log(e));
   };
 
 export const makeRegistration =
@@ -129,13 +129,15 @@ export const getUser = () => (dispatch: AppDispatch) => {
           localStorage.setItem("refreshToken", data.refreshToken);
         })
         .catch((err) => console.log("update err", err));
-      fetchGetUser().then((data) => {
-        console.log("new data", data);
-        if (data.success) {
-          dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
-          dispatch({ type: AUTH_SUCCESS, payload: data.user });
-        }
-      });
+      fetchGetUser()
+        .then((data) => {
+          console.log("new data", data);
+          if (data.success) {
+            dispatch({ type: SET_IS_AUTH_CHECKED, payload: true });
+            dispatch({ type: AUTH_SUCCESS, payload: data.user });
+          }
+        })
+        .catch((e) => console.log(e));
     });
 };
 

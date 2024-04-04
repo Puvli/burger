@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, SyntheticEvent } from "react";
 import {
   ADD_INGREDIENTS_SUCCESS,
   AUTH_SUCCESS,
@@ -97,12 +97,12 @@ export interface ICustomer {
 }
 
 export type TInfo = {
-  onClick: void;
+  onClick?: (() => void) | ((e: SyntheticEvent) => void);
   price: number;
 };
 
 export interface IBurgerConstructor {
-  onClick?: void;
+  onClick?: (() => void) | ((e: SyntheticEvent) => void);
   onDropHandler: (item: IIngredient) => void;
 }
 
