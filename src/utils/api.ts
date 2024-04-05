@@ -6,30 +6,10 @@ const headers: HeadersInit = {
   "Content-Type": "application/json",
 };
 
-const headersAuthariztion: HeadersInit = {
-  "Content-Type": "application/json",
-  Authorization: localStorage.getItem("accessToken") || "",
-};
-
-// const headersAuth = {
-//   Accept: "application/json",
+// const headersAuthariztion: HeadersInit = {
 //   "Content-Type": "application/json",
-//   authorization: localStorage.getItem("accessToken"),
+//   Authorization: localStorage.getItem("accessToken")!,
 // };
-
-// const headersRefreshAuth = {
-//   Accept: "application/json",
-//   "Content-Type": "application/json",
-//   authorization: localStorage.getItem("refreshToken"),
-// };
-
-// function checkResponse(res: Response): Promise<any> {
-//   if (res.ok) {
-//     return res.json();
-//   } else {
-//     return Promise.reject(res.status);
-//   }
-// }
 
 function checkResponse(res: Response): Promise<any> {
   if (res.ok) {
@@ -63,9 +43,10 @@ export function ingredientsApi() {
 export const getOrderNumber = (id: MakeNewOrderPayload) => {
   // const accessToken = localStorage.getItem("accessToken");
   return request(`orders`, {
-    // return request("orders", {
-    // headers,
-    headers: headersAuthariztion,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("accessToken")!,
+    },
     method: "POST",
     body: JSON.stringify(id),
   });
@@ -107,7 +88,7 @@ export const loginApi = (value: { email: string; password: string }) => {
   });
 };
 
-export const logOutApi  = (value: { token: string | null }) => {
+export const logOutApi = (value: { token: string | null }) => {
   return request("auth/logout", {
     headers,
     method: "POST",
@@ -125,7 +106,10 @@ export const updToken = (value: { token: string | null }) => {
 
 export const fetchGetUser = () => {
   return request("auth/user", {
-    headers: headersAuthariztion,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("accessToken")!,
+    },
     method: "GET",
   });
 };
@@ -136,7 +120,10 @@ export const updateUserInformationApi = (
   password: string
 ) => {
   return request("auth/user", {
-    headers: headersAuthariztion,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("accessToken")!,
+    },
     method: "PATCH",
     body: JSON.stringify({ name, email, password }),
   });
